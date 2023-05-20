@@ -1,0 +1,43 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: gid
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: kafka
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  logging:
+    level:
+      root: ERROR
+      org.springframework: ERROR
+  datasource:
+    url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNew
+    username: postgres
+    password: 123
+    driverClassName: org.postgresql.Driver
+  h2:
+    console.enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  activemq:
+    broker-url: tcp://localhost:6161
+    user: admin
+    password: admin
+management:
+  endpoints:
+    web:
+      exposure:
+        include: beans,mappings,env
