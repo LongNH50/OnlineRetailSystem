@@ -1,7 +1,6 @@
 package miu.edu.onlineRetailSystem.service;
 
-import miu.edu.onlineRetailSystem.contact.AddressResponse;
-import miu.edu.onlineRetailSystem.contact.AddressTypeResponse;
+import miu.edu.onlineRetailSystem.contract.AddressTypeResponse;
 
 public interface AddressTypeService {
 

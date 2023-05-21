@@ -1,6 +1,6 @@
 package miu.edu.onlineRetailSystem.service;
 
-import miu.edu.onlineRetailSystem.contact.AddressTypeResponse;
+import miu.edu.onlineRetailSystem.contract.AddressTypeResponse;
 import miu.edu.onlineRetailSystem.domain.AddressType;
 import miu.edu.onlineRetailSystem.repository.AddressTypeRepository;
 import org.modelmapper.ModelMapper;
