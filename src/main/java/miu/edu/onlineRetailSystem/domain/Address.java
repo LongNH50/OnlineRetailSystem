@@ -14,20 +14,19 @@ public class Address {
 
     @Id
     @GeneratedValue
+    @Column(name = "addressID")
     private int id;
     private String street;
     private String city;
     private String state;
     private String zipCode;
-    private boolean isDefault;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerID")
     private Customer customer;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addressType")
     private AddressType addressType;
-
 
 }

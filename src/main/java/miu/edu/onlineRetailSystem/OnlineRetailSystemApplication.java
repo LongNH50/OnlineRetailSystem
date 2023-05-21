@@ -87,26 +87,24 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
         List<Address> shippingAddressList = new ArrayList<>();
 
-        // Create shipping addresses
+        // Create shipping addresses with one default
+        Address defaultShippingAddress = new Address();
+        defaultShippingAddress.setCity("City 1");
+        defaultShippingAddress.setStreet("Street 1");
+        defaultShippingAddress.setState("State 1");
+        defaultShippingAddress.setZipCode("12345");
+        defaultShippingAddress.setAddressType(new AddressType("ShippingAddress"));
+
+
         Address shippingAddress1 = new Address();
-        shippingAddress1.setCity("City 1");
-        shippingAddress1.setStreet("Street 1");
-        shippingAddress1.setState("State 1");
+        shippingAddress1.setCity("City 2");
+        shippingAddress1.setStreet("Street 2");
+        shippingAddress1.setState("State 2");
         shippingAddress1.setZipCode("12345");
-        shippingAddress1.setDefault(true);
         shippingAddress1.setAddressType(new AddressType("ShippingAddress"));
 
-
-        Address shippingAddress2 = new Address();
-        shippingAddress2.setCity("City 2");
-        shippingAddress2.setStreet("Street 2");
-        shippingAddress2.setState("State 2");
-        shippingAddress2.setZipCode("12345");
-        shippingAddress2.setDefault(false);
-        shippingAddress2.setAddressType(new AddressType("ShippingAddress"));
-
+        shippingAddressList.add(defaultShippingAddress);
         shippingAddressList.add(shippingAddress1);
-        shippingAddressList.add(shippingAddress2);
 
 
         // Create billing address
@@ -115,7 +113,6 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         billingAddress.setStreet("Street 3");
         billingAddress.setState("State 3");
         billingAddress.setZipCode("12345");
-        billingAddress.setDefault(false);
         billingAddress.setAddressType(new AddressType("BillingAddress"));
 
         // Create credit cards
@@ -171,6 +168,7 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
 
         buyer.setShippingAddresses(shippingAddressList);
+        buyer.setDefaultShippingAddress(defaultShippingAddress);
         buyer.setBillingAddress(billingAddress);
         buyer.setCreditCards(creditCards);
 
