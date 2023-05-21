@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.contact;
+package miu.edu.onlineRetailSystem.contract;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
