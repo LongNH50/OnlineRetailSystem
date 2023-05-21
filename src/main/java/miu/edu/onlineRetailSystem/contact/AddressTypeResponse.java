@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.config;
+package miu.edu.onlineRetailSystem.contact;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

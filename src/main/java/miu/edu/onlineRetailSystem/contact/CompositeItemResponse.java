@@ -1,6 +1,5 @@
-package miu.edu.onlineRetailSystem.config;
+package miu.edu.onlineRetailSystem.contact;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import miu.edu.onlineRetailSystem.domain.Item;
 

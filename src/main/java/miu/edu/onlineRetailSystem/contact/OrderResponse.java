@@ -1,12 +1,8 @@
-package miu.edu.onlineRetailSystem.config;
+package miu.edu.onlineRetailSystem.contact;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import miu.edu.onlineRetailSystem.domain.Address;
-import miu.edu.onlineRetailSystem.domain.Customer;
-import miu.edu.onlineRetailSystem.domain.OrderLine;
 import miu.edu.onlineRetailSystem.domain.OrderStatus;
 
 import java.util.ArrayList;

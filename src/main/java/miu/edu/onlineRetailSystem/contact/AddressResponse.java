@@ -1,10 +1,8 @@
-package miu.edu.onlineRetailSystem.config;
+package miu.edu.onlineRetailSystem.contact;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import miu.edu.onlineRetailSystem.domain.AddressType;
-import miu.edu.onlineRetailSystem.domain.Customer;
 
 @Data
 @AllArgsConstructor
