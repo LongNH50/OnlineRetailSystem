@@ -27,8 +27,12 @@ public class Customer {
     @JoinColumn(name = "billingAddressID")
     private Address billingAddress;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Address> shippingAddresses = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "defaultShippingAddressID")
+    private Address defaultShippingAddress;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "customerID")
@@ -36,4 +40,12 @@ public class Customer {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "buyer")
     List<Review> reviews = new ArrayList<>();
+
+    public void setDefaultShippingAddress(Address address) {
+        if (shippingAddresses.contains(address)) {
+            defaultShippingAddress = address;
+        } else {
+            throw new IllegalArgumentException("Address is not associated with the customer");
+        }
+    }
 }
