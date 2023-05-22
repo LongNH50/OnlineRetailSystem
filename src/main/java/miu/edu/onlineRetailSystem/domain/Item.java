@@ -15,7 +15,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Item {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "itemID")
     private int id;
     private String name;
@@ -25,9 +25,10 @@ public abstract class Item {
     private String barcodeNumber;
     private int quantityInStock;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "ItemReview",
-    joinColumns = @JoinColumn(name = "itemID"),
-    inverseJoinColumns = @JoinColumn(name = "reviewID"))
+
+//    @JoinTable(name = "ItemReview",
+//    joinColumns = @JoinColumn(name = "itemID"),
+//    inverseJoinColumns = @JoinColumn(name = "reviewID"))
+@OneToMany(cascade = CascadeType.DETACH)
     private List<Review> reviews = new ArrayList<>();
 }

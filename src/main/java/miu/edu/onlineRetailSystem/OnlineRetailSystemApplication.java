@@ -1,6 +1,7 @@
 package miu.edu.onlineRetailSystem;
 
 import miu.edu.onlineRetailSystem.domain.*;
+import miu.edu.onlineRetailSystem.repository.CreditCardRepository;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +17,8 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    CreditCardRepository creditCardRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(OnlineRetailSystemApplication.class, args);
@@ -93,7 +96,6 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         shippingAddress1.setStreet("Street 1");
         shippingAddress1.setState("State 1");
         shippingAddress1.setZipCode("12345");
-        shippingAddress1.setDefault(true);
         shippingAddress1.setAddressType(new AddressType("ShippingAddress"));
 
 
@@ -102,7 +104,6 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         shippingAddress2.setStreet("Street 2");
         shippingAddress2.setState("State 2");
         shippingAddress2.setZipCode("12345");
-        shippingAddress2.setDefault(false);
         shippingAddress2.setAddressType(new AddressType("ShippingAddress"));
 
         shippingAddressList.add(shippingAddress1);
@@ -115,7 +116,6 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         billingAddress.setStreet("Street 3");
         billingAddress.setState("State 3");
         billingAddress.setZipCode("12345");
-        billingAddress.setDefault(false);
         billingAddress.setAddressType(new AddressType("BillingAddress"));
 
         // Create credit cards
@@ -131,8 +131,14 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         creditCard2.setExpirationDate(LocalDateTime.now());
         creditCard2.setSecurityCode("321");
 
+        CreditCard creditCard3 = new CreditCard();
+        creditCard3.setNumber("9876543210987657");
+        creditCard3.setExpirationDate(LocalDateTime.now());
+        creditCard3.setSecurityCode("111");
+
         creditCards.add(creditCard1);
         creditCards.add(creditCard2);
+        creditCards.add(creditCard3);
         // Create order
         Order order = new Order();
         order.setCustomer(buyer);
@@ -161,13 +167,13 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         orderLines.add(lineItem3);
 
         // Establish relationships
-        List<Review> reviewItem1 = new ArrayList<>();
-        reviewItem1.add(review1);
-        item1.setReviews(reviewItem1);
-
-        List<Review> reviewItem2 = new ArrayList<>();
-        reviewItem2.add(review2);
-        item2.setReviews(reviewItem2);
+//        List<Review> reviewItem1 = new ArrayList<>();
+//        reviewItem1.add(review1);
+//        item1.setReviews(reviewItem1);
+//
+//        List<Review> reviewItem2 = new ArrayList<>();
+//        reviewItem2.add(review2);
+//        item2.setReviews(reviewItem2);
 
 
         buyer.setShippingAddresses(shippingAddressList);
@@ -177,6 +183,9 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         order.setLineItems(orderLines);
 
         orderRepository.save(order);
+//        creditCardRepository.save(creditCard1);
+//        creditCardRepository.save(creditCard2);
+//        creditCardRepository.save(creditCard3);
 
     }
 }

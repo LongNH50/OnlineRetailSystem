@@ -1,33 +1,31 @@
-package miu.edu.onlineRetailSystem.domain;
+package miu.edu.onlineRetailSystem.contract;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "creditCards")
-public class CreditCard {
+public class CreditCardResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "creditCardID")
     private int id;
     private String number;
     private LocalDateTime expirationDate;
     private String securityCode;
 
-    public CreditCard(String number, LocalDateTime expirationDate, String securityCode) {
+    // Constructors, getters, and setters
+
+    // Parameterized constructor
+    public CreditCardResponse(String number, LocalDateTime expirationDate, String securityCode) {
         this.number = number;
         this.expirationDate = expirationDate;
         this.securityCode = securityCode;
     }
 
+    // Getters and setters
     public String getNumber() {
         return number;
     }
