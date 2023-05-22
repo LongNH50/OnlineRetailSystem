@@ -31,6 +31,7 @@ public class AddressController {
         addressService.deleteAddressById(id);
         return new ResponseEntity<Address>(HttpStatus.OK);
     }
+
     @GetMapping("/addresses/{id}/shipping/{shippingAddress}")
     public List<AddressResponse> getShippingAddresses(@PathVariable Integer id, @PathVariable String shippingAddress){
         List<AddressResponse> addressesList =  addressService.getShippingAddressByCustomerId(id,shippingAddress);
