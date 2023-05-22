@@ -91,7 +91,6 @@ public class OrderServiceImpl implements OrderService {
         for (OrderLine orderLine : order.getLineItems()) {
             int inStock = orderLine.getItem().getQuantityInStock();
             int quantity = orderLine.getQuantity();
-            System.out.println("quantity: " + quantity + " in stock: " + inStock);
             if (quantity > inStock) throw new CustomerException("Quantity of " + orderLine.getItem().getName() +
                     " is greater than the quantity in stock");
             orderLine.getItem().setQuantityInStock(inStock - quantity);
