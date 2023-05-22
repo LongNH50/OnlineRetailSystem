@@ -10,7 +10,8 @@ import java.util.List;
 @Data
 @Table(name = "compositeItems")
 public class CompositeItem extends Item {
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
+@OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "compositeItems_Items")
     private List<Item> subItems = new ArrayList<>();
 
