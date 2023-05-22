@@ -62,6 +62,7 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
         CompositeItem compositeItem = new CompositeItem();
         compositeItem.setName("Mystery Box");
+        compositeItem.setQuantityInStock(10);
         compositeItem.addSubItem(item3);
         compositeItem.addSubItem(item4);
         compositeItem.setPrice(compositeItem.getPrice());

@@ -18,6 +18,5 @@ public abstract class ItemResponse {
     private byte[] image;
     private String barcodeNumber;
     private int quantityInStock;
-
     private List<ReviewResponse> reviews = new ArrayList<>();
 }
