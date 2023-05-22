@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "items")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Item {
+public  class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "itemID")

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "addressID")
     private int id;
     private String street;
@@ -25,7 +25,7 @@ public class Address {
     @JoinColumn(name = "customerID")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addressType")
     private AddressType addressType;
 

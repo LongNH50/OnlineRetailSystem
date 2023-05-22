@@ -1,12 +1,13 @@
 package miu.edu.onlineRetailSystem;
 
 import miu.edu.onlineRetailSystem.domain.*;
-import miu.edu.onlineRetailSystem.repository.CreditCardRepository;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,8 +18,7 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
     @Autowired
     OrderRepository orderRepository;
-    @Autowired
-    CreditCardRepository creditCardRepository;
+
 
     public static void main(String[] args) {
         SpringApplication.run(OnlineRetailSystemApplication.class, args);
@@ -31,7 +31,7 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         Item item1 = new IndividualItem();
         item1.setName("Item 1");
         item1.setDescription("Description of Item 1");
-        item1.setPrice(10.0);
+        item1.setPrice(25.0);
         item1.setImage(new byte[]{/* image data */});
         item1.setBarcodeNumber("123456789");
         item1.setQuantityInStock(5);
@@ -90,24 +90,24 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
         List<Address> shippingAddressList = new ArrayList<>();
 
-        // Create shipping addresses
+        // Create shipping addresses with one default
+        Address defaultShippingAddress = new Address();
+        defaultShippingAddress.setCity("City 1");
+        defaultShippingAddress.setStreet("Street 1");
+        defaultShippingAddress.setState("State 1");
+        defaultShippingAddress.setZipCode("12345");
+        defaultShippingAddress.setAddressType(new AddressType("ShippingAddress"));
+
+
         Address shippingAddress1 = new Address();
-        shippingAddress1.setCity("City 1");
-        shippingAddress1.setStreet("Street 1");
-        shippingAddress1.setState("State 1");
+        shippingAddress1.setCity("City 2");
+        shippingAddress1.setStreet("Street 2");
+        shippingAddress1.setState("State 2");
         shippingAddress1.setZipCode("12345");
         shippingAddress1.setAddressType(new AddressType("ShippingAddress"));
 
-
-        Address shippingAddress2 = new Address();
-        shippingAddress2.setCity("City 2");
-        shippingAddress2.setStreet("Street 2");
-        shippingAddress2.setState("State 2");
-        shippingAddress2.setZipCode("12345");
-        shippingAddress2.setAddressType(new AddressType("ShippingAddress"));
-
+        shippingAddressList.add(defaultShippingAddress);
         shippingAddressList.add(shippingAddress1);
-        shippingAddressList.add(shippingAddress2);
 
 
         // Create billing address
@@ -131,14 +131,8 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         creditCard2.setExpirationDate(LocalDateTime.now());
         creditCard2.setSecurityCode("321");
 
-        CreditCard creditCard3 = new CreditCard();
-        creditCard3.setNumber("9876543210987657");
-        creditCard3.setExpirationDate(LocalDateTime.now());
-        creditCard3.setSecurityCode("111");
-
         creditCards.add(creditCard1);
         creditCards.add(creditCard2);
-        creditCards.add(creditCard3);
         // Create order
         Order order = new Order();
         order.setCustomer(buyer);
@@ -167,25 +161,27 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         orderLines.add(lineItem3);
 
         // Establish relationships
-//        List<Review> reviewItem1 = new ArrayList<>();
-//        reviewItem1.add(review1);
-//        item1.setReviews(reviewItem1);
-//
-//        List<Review> reviewItem2 = new ArrayList<>();
-//        reviewItem2.add(review2);
-//        item2.setReviews(reviewItem2);
+        List<Review> reviewItem1 = new ArrayList<>();
+        reviewItem1.add(review1);
+        item1.setReviews(reviewItem1);
+
+        List<Review> reviewItem2 = new ArrayList<>();
+        reviewItem2.add(review2);
+        item2.setReviews(reviewItem2);
 
 
         buyer.setShippingAddresses(shippingAddressList);
+        buyer.setDefaultShippingAddress(defaultShippingAddress);
         buyer.setBillingAddress(billingAddress);
         buyer.setCreditCards(creditCards);
 
         order.setLineItems(orderLines);
 
         orderRepository.save(order);
-//        creditCardRepository.save(creditCard1);
-//        creditCardRepository.save(creditCard2);
-//        creditCardRepository.save(creditCard3);
+
+//        AddressTypeResponse address1 = new AddressTypeResponse("muaz");
+//        addressTypeService.save(address1);
+
 
     }
 }
