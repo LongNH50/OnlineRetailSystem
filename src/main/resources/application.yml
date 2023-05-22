@@ -1,4 +1,8 @@
 spring:
+  security:
+    user:
+      name: user
+      password: pass
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
