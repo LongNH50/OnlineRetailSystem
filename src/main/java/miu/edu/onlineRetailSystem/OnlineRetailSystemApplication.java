@@ -2,11 +2,12 @@ package miu.edu.onlineRetailSystem;
 
 import miu.edu.onlineRetailSystem.domain.*;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
 
     @Autowired
     OrderRepository orderRepository;
+
 
     public static void main(String[] args) {
         SpringApplication.run(OnlineRetailSystemApplication.class, args);
@@ -29,7 +31,7 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         Item item1 = new IndividualItem();
         item1.setName("Item 1");
         item1.setDescription("Description of Item 1");
-        item1.setPrice(10.0);
+        item1.setPrice(25.0);
         item1.setImage(new byte[]{/* image data */});
         item1.setBarcodeNumber("123456789");
         item1.setQuantityInStock(5);
@@ -176,6 +178,10 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         order.setLineItems(orderLines);
 
         orderRepository.save(order);
+
+//        AddressTypeResponse address1 = new AddressTypeResponse("muaz");
+//        addressTypeService.save(address1);
+
 
     }
 }
