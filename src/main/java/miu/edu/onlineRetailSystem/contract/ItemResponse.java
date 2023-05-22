@@ -9,8 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public abstract class ItemResponse {
+public  class ItemResponse {
     private int id;
     private String name;
     private String description;
@@ -20,4 +19,7 @@ public abstract class ItemResponse {
     private int quantityInStock;
 
     private List<ReviewResponse> reviews = new ArrayList<>();
+    public ItemResponse() {
+        // Default constructor
+    }
 }
