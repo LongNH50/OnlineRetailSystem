@@ -19,7 +19,7 @@ public class OrderResponse {
 
     private AddressResponse shippingAddress;
 
-    private OrderStatus status;
+    private OrderStatusResponse status;
 
     private List<OrderLineResponse> lineItems = new ArrayList<>();
 
