@@ -16,6 +16,6 @@ public class ReviewResponse {
     private int stars;
     private LocalDateTime date;
 
-    private CustomerResponse buyerResponse;
+//    private CustomerResponse buyerResponse;
 
 }

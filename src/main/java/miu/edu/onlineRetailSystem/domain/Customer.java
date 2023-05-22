@@ -16,7 +16,7 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customerID")
     private int id;
     private String firstName;
@@ -38,7 +38,8 @@ public class Customer {
     @JoinColumn(name = "customerID")
     private List<CreditCard> creditCards = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "buyer")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "customerID")
     List<Review> reviews = new ArrayList<>();
 
     public void setDefaultShippingAddress(Address address) {
