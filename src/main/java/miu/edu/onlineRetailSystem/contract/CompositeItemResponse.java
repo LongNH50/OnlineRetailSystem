@@ -1,13 +1,17 @@
 package miu.edu.onlineRetailSystem.contract;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import miu.edu.onlineRetailSystem.domain.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class CompositeItemResponse extends Item {
+@AllArgsConstructor
+@NoArgsConstructor
+public class CompositeItemResponse extends ItemResponse {
     private List<ItemResponse> subItems = new ArrayList<>();
 
     // Constructors, getters, and setters
@@ -32,4 +36,5 @@ public class CompositeItemResponse extends Item {
         }
         return sum;
     }
+
 }
