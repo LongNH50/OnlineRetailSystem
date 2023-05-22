@@ -36,7 +36,7 @@ public class AddressTypeServiceImpl implements AddressTypeService{
         addressTypeRepository.save(addressType);
 
 
-            return null;
+        return null;
 
     }
 }
