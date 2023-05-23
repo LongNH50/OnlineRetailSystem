@@ -1,8 +1,9 @@
 package miu.edu.onlineRetailSystem.service;
 
+import miu.edu.onlineRetailSystem.contract.OrderLineResponse;
 import miu.edu.onlineRetailSystem.contract.OrderResponse;
-import miu.edu.onlineRetailSystem.contract.OrderStatusResponse;
-import miu.edu.onlineRetailSystem.domain.Order;
+import miu.edu.onlineRetailSystem.contract.ReviewResponse;
+import miu.edu.onlineRetailSystem.domain.OrderLine;
 import miu.edu.onlineRetailSystem.domain.OrderStatus;
 import miu.edu.onlineRetailSystem.exceptionHandlers.CustomerException;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public interface OrderService {
 
     OrderResponse save(OrderResponse orderResponse);
 
-    OrderResponse update(int orderId, OrderResponse orderResponse);
+    OrderResponse update(int customerId, int orderId, OrderResponse orderResponse);
 
     /**
      * return null when the order does not exist
@@ -26,9 +27,16 @@ public interface OrderService {
      */
     OrderResponse placeOrder(int orderId) throws CustomerException;
 
-    OrderResponse updateStatus(int orderId, OrderStatusResponse orderStatusResponse);
+    OrderResponse updateStatus(int customerId, int orderId, OrderStatus orderStatus);
 
     Page<OrderResponse> findAllByCustomer(int customerId, Pageable pageable);
 
-    OrderResponse getOrder(int orderId);
+    OrderResponse getOrder(int customerId, int orderId);
+
+    Collection<OrderLineResponse> getCustomerOrderLines(int customerId, int orderId);
+    OrderLineResponse getCustomerOrderLine(int customerId, int orderId, int orderLineId);
+
+    ReviewResponse getReviewByCustomerAndOrder(int customer, int orderId);
+
+    ReviewResponse getReviewByIdAndCustomerAndOrder(int customerId, int orderId, int reviewId);
 }

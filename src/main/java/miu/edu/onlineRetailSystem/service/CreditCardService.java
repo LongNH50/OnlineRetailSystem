@@ -13,4 +13,6 @@ public interface CreditCardService {
     CreditCardResponse remove(int id);
 
     CreditCardResponse findById(int id);
+
+//    CreditCardResponse getCreditCard(int customerId, int creditCardId);
 }

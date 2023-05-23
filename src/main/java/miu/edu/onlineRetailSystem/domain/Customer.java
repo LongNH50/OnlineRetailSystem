@@ -49,4 +49,12 @@ public class Customer {
             throw new IllegalArgumentException("Address is not associated with the customer");
         }
     }
+
+    public void addCreditCart(CreditCard creditCard) {
+        this.creditCards.add(creditCard);
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
 }

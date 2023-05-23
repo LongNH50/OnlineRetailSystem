@@ -3,6 +3,7 @@ package miu.edu.onlineRetailSystem.service;
 import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.ReviewResponse;
 import miu.edu.onlineRetailSystem.domain.Review;
+import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.ReviewRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,16 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public ReviewResponse update(int reviewId, ReviewResponse reviewResponse) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->new EntityNotFoundException("review not found"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ResourceNotFoundException(
+                "Review", "Id", reviewId
+        ));
 //        Review review = mapper.map(reviewResponse, Review.class);
         review.setTitle(reviewResponse.getTitle());
         review.setDescription(reviewResponse.getDescription());
         review.setDate(reviewResponse.getDate());
         review.setStars(reviewResponse.getStars());
         reviewRepository.save(review);
+
         return reviewResponse;
     }
 

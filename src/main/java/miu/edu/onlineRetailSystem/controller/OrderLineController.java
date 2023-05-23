@@ -15,19 +15,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/orderlines")
 public class OrderLineController {
-    @Autowired
-    private OrderLineService orderLineService;
-
-    @GetMapping
-    public ResponseEntity<List<OrderLineResponse>> getAllOrderLines() {
-        List<OrderLineResponse> orderLines = orderLineService.getAllOrderLines();
-        return new ResponseEntity<>(orderLines, HttpStatus.OK);
-    }
-
-    @GetMapping("/{orderLineId}")
-    public ResponseEntity<OrderLineResponse> getOrderLine(@PathVariable("orderLineId") int id) {
-        OrderLineResponse orderLine = orderLineService.findById(id);
-        System.out.println(orderLine);
-        return new ResponseEntity<>(orderLine, HttpStatus.OK);
-    }
+//    @Autowired
+//    private OrderLineService orderLineService;
+//
+//    @GetMapping
+//    public ResponseEntity<List<OrderLineResponse>> getAllOrderLines() {
+//        List<OrderLineResponse> orderLines = orderLineService.getAllOrderLines();
+//        return new ResponseEntity<>(orderLines, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/{orderLineId}")
+//    public ResponseEntity<OrderLineResponse> getOrderLine(@PathVariable("orderLineId") int id) {
+//        OrderLineResponse orderLine = orderLineService.findById(id);
+//        System.out.println(orderLine);
+//        return new ResponseEntity<>(orderLine, HttpStatus.OK);
+//    }
 }

@@ -25,8 +25,7 @@ public class Address {
     @JoinColumn(name = "customerID")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "addressType")
+    @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
 }

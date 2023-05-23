@@ -23,5 +23,7 @@ public class OrderResponse {
 
     private List<OrderLineResponse> lineItems = new ArrayList<>();
 
-
+    public void addOrderLineResponse(OrderLineResponse orderLineResponse) {
+        this.lineItems.add(orderLineResponse);
+    }
 }

@@ -35,5 +35,8 @@ public class Order {
     @JoinColumn(name = "orderID")
     private List<OrderLine> lineItems = new ArrayList<>();
 
+    public void addOrderLine(OrderLine orderLine) {
+        this.lineItems.add(orderLine);
+    }
 
 }
