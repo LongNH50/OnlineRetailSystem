@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 
 import java.time.LocalDateTime;
@@ -14,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
+@EntityScan("miu.edu.onlineRetailSystem")
+@ComponentScan("config")
 public class OnlineRetailSystemApplication implements CommandLineRunner {
 
     @Autowired
@@ -161,13 +166,13 @@ public class OnlineRetailSystemApplication implements CommandLineRunner {
         orderLines.add(lineItem3);
 
         // Establish relationships
-        List<Review> reviewItem1 = new ArrayList<>();
-        reviewItem1.add(review1);
-        item1.setReviews(reviewItem1);
-
-        List<Review> reviewItem2 = new ArrayList<>();
-        reviewItem2.add(review2);
-        item2.setReviews(reviewItem2);
+//        List<Review> reviewItem1 = new ArrayList<>();
+//        reviewItem1.add(review1);
+//        item1.setReviews(reviewItem1);
+//
+//        List<Review> reviewItem2 = new ArrayList<>();
+//        reviewItem2.add(review2);
+//        item2.setReviews(reviewItem2);
 
 
         buyer.setShippingAddresses(shippingAddressList);

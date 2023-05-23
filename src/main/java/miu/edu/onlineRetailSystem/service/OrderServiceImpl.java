@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
             return modelMapper.map(order, OrderResponse.class);
         }
-        return null;
+        throw new IllegalArgumentException("Invalid orderId or orderResponse");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
             return modelMapper.map(order, OrderResponse.class);
         }
-        return null;
+        throw new IllegalArgumentException("Invalid orderId or orderResponse");
     }
 
     @Override
@@ -70,7 +70,8 @@ public class OrderServiceImpl implements OrderService {
 
             return modelMapper.map(order, OrderResponse.class);
         }
-        return null;
+        throw new IllegalArgumentException("Invalid orderId or orderResponse");
+
     }
 
     @Override
