@@ -1,8 +1,8 @@
 package miu.edu.onlineRetailSystem;
 
 import miu.edu.onlineRetailSystem.domain.Address;
-import miu.edu.onlineRetailSystem.domain.AddressType;
 import miu.edu.onlineRetailSystem.domain.Customer;
+import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 import miu.edu.onlineRetailSystem.repository.AddressRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
