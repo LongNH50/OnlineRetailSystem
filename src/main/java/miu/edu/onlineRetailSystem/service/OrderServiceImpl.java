@@ -3,13 +3,16 @@ package miu.edu.onlineRetailSystem.service;
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
+import miu.edu.onlineRetailSystem.events.ProcessEvent;
 import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.AddressRepository;
+import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,8 @@ public class OrderServiceImpl implements OrderService {
     private ModelMapper modelMapper;
     @Autowired
     private OrderLineService orderLineService;
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Override
     public OrderResponse save(int customerId, OrderResponse orderResponse) {
@@ -77,6 +82,8 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.PLACED);
         order.setShippingAddress(defaultShippingAddress);
         order = orderRepository.save(order);
+
+        publisher.publishEvent(new ProcessEvent(customerId, orderId));
 
         return modelMapper.map(order, OrderResponse.class);
     }

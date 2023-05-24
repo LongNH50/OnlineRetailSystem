@@ -54,7 +54,7 @@ public class CreditCardServiceImpl implements CreditCardService{
 
     @Override
     public CreditCardResponse remove(int id) {
-        CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("CreditCard", "Id", id));
         creditCardRepository.delete(creditCard);
         CreditCardResponse creditCardresponse = mapper.map(creditCard, CreditCardResponse.class);
         return creditCardresponse;
@@ -62,7 +62,7 @@ public class CreditCardServiceImpl implements CreditCardService{
 
     @Override
     public CreditCardResponse findById(int id) {
-        CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("CreditCard", "Id", id));
         CreditCardResponse creditCardresponse = mapper.map(creditCard, CreditCardResponse.class);
         return creditCardresponse;
     }

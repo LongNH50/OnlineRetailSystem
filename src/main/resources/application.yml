@@ -24,7 +24,7 @@ spring:
       root: ERROR
       org.springframework: ERROR
   datasource:
-    url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNew
+    url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNewWithJWT
     username: postgres
     password: AdCool386259@
     driverClassName: org.postgresql.Driver
@@ -34,7 +34,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
   activemq:
     broker-url: tcp://localhost:6161
@@ -45,3 +45,10 @@ management:
     web:
       exposure:
         include: beans,mappings,env
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days

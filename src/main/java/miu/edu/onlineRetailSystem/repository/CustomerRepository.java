@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 
+import java.util.Optional;
+
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     @Query("select cc from Customer c join c.creditCards cc where c.id = :customerId")
@@ -21,4 +23,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     @Query("select r from Customer c join c.reviews r where c.id = :customerId")
     Page<Review> findReviewsByCustomer(@Param("customerId") int customerId, Pageable pageable);
+
+    Optional<Customer> findByEmail(String email);
 }
