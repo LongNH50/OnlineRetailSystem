@@ -118,29 +118,6 @@ class CreditCardServiceImplTest {
         verify(modelMapper).map(creditCard, CreditCardResponse.class);
         verifyNoMoreInteractions(creditCardRepository, modelMapper);
     }
-//    @Test
-//    void update_WhenCreditCardExists_ShouldReturnUpdatedCreditCardResponse() {
-//        // Arrange
-//        int creditCardId = 1;
-//        CreditCardResponse creditCardResponse = new CreditCardResponse();
-//        CreditCard creditCard = new CreditCard();
-//
-//        when(creditCardRepository.findById(creditCardId)).thenReturn(Optional.of(creditCard));
-//        when(modelMapper.map(creditCardResponse, CreditCard.class)).thenReturn(creditCard);
-//        when(modelMapper.map(creditCard, CreditCardResponse.class)).thenReturn(creditCardResponse);
-//
-//        // Act
-//        CreditCardResponse result = creditCardService.update(creditCardId, creditCardResponse);
-//
-//        // Assert
-//        assertEquals(creditCardResponse, result);
-//        verify(creditCardRepository).findById(creditCardId);
-//        verify(modelMapper).map(creditCardResponse, CreditCard.class);
-//        verify(modelMapper).map(creditCard, CreditCardResponse.class);
-//        verifyNoMoreInteractions(creditCardRepository, modelMapper);
-//    }
-
-
 
 
     @Test

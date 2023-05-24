@@ -3,7 +3,6 @@ package miu.edu.onlineRetailSystem.repository;
 import miu.edu.onlineRetailSystem.domain.CreditCard;
 import miu.edu.onlineRetailSystem.domain.Customer;
 import miu.edu.onlineRetailSystem.domain.Review;
-import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,54 +11,89 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class CustomerRepositoryTest {
-
-    @Autowired
-    private CustomerRepository customerRepository;
+public class CustomerRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
+
+
     @Test
     void findCreditCardByCustomer_WhenValidCustomerId_ShouldReturnCreditCards() {
-        int customerId = 1;
+        // Arrange
+        Customer customer = new Customer();
+        List<CreditCard> creditCards = new ArrayList<>();
+        CreditCard creditCard1 = new CreditCard();
+        CreditCard creditCard2 = new CreditCard();
+        customer.getCreditCards().add(creditCard1);
+        customer.getCreditCards().add(creditCard2);
+        customer.getCreditCards().add(creditCard2);
+        entityManager.persist(customer);
+        entityManager.flush();
 
-        Collection<CreditCard> creditCards = customerRepository.findCreditCardByCustomer(customerId);
+        // Act
+        Collection<CreditCard> result = customerRepository.findCreditCardByCustomer(customer.getId());
 
-        assertNotNull(creditCards);
-        // Add assertions for the expected credit card data
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertTrue(result.contains(creditCard1));
+        assertTrue(result.contains(creditCard2));
     }
 
-//    @Test
-//    void findCreditCardByCreditCardIdAndCustomer_WhenValidIds_ShouldReturnCreditCard() {
-//        int customerId = 1;
-//        int creditCardId = 1;
-//
-//        CreditCard creditCard = customerRepository.findCreditCardByCreditCardIdAndCustomer(customerId, creditCardId);
-//
-//        assertNotNull(creditCard, "Credit Card should not be null");
-//        assertEquals(creditCardId, creditCard.getId(), "Credit Card ID should match");
-//
-//        System.out.println("Actual Credit Card: " + creditCard);
-//        System.out.println("Credit Card ID: " + creditCard.getId());
-//    }
+    @Test
+    void findCreditCardByCreditCardIdAndCustomer_WhenValidIds_ShouldReturnCreditCard() {
+        // Arrange
+        Customer customer = new Customer();
+        List<CreditCard> creditCards = new ArrayList<>();
+        CreditCard creditCard = new CreditCard();
+        customer.getCreditCards().add(creditCard);
+        entityManager.persist(customer);
+        entityManager.flush();
 
+        // Act
+        CreditCard result = customerRepository.findCreditCardByCreditCardIdAndCustomer(customer.getId(), creditCard.getId());
 
+        // Assert
+        assertNotNull(result);
+        assertEquals(creditCard.getId(), result.getId());
+        assertEquals(creditCard.getNumber(), result.getNumber());
+        // Add more assertions as needed
+    }
 
     @Test
     void findReviewsByCustomer_WhenValidCustomerId_ShouldReturnReviewsPage() {
-        int customerId = 1;
+        // Arrange
+        Customer customer = new Customer();
+        List<Review> reviews = new ArrayList<>();
+        Review review1 = new Review();
+        Review review2 = new Review();
+        reviews.add(review1);
+        reviews.add(review2);
+        customer.setReviews(reviews);
+        entityManager.persist(customer);
+        entityManager.flush();
+
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<Review> reviewsPage = customerRepository.findReviewsByCustomer(customerId, pageable);
+        // Act
+        Page<Review> result = customerRepository.findReviewsByCustomer(customer.getId(), pageable);
 
-        assertNotNull(reviewsPage);
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.getTotalElements());
+        assertTrue(result.getContent().contains(review1));
+        assertTrue(result.getContent().contains(review2));
     }
+    // Add other tests for the findReviewsByCustomer method
 }
