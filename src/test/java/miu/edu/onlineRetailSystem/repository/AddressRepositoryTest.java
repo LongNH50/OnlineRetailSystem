@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem;
+package miu.edu.onlineRetailSystem.repository;
 
 import miu.edu.onlineRetailSystem.domain.Address;
 import miu.edu.onlineRetailSystem.domain.Customer;

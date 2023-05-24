@@ -1,6 +1,5 @@
 package miu.edu.onlineRetailSystem.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.CreditCardResponse;
 import miu.edu.onlineRetailSystem.domain.CreditCard;
 import miu.edu.onlineRetailSystem.domain.Customer;
@@ -76,11 +75,11 @@ class CreditCardServiceImplTest {
     }
 
     @Test
-    void remove_WhenCreditCardDoesNotExist_ShouldThrowEntityNotFoundException() {
+    void remove_WhenCreditCardDoesNotExist_ShouldThrowResourceNotFoundException() {
         int creditCardId = 1;
         when(creditCardRepository.findById(creditCardId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
+        assertThrows(ResourceNotFoundException.class, () -> {
             creditCardService.remove(creditCardId);
         });
         verify(creditCardRepository).findById(creditCardId);
@@ -121,11 +120,11 @@ class CreditCardServiceImplTest {
 
 
     @Test
-    void findById_WhenCreditCardDoesNotExist_ShouldThrowEntityNotFoundException() {
+    void findById_WhenCreditCardDoesNotExist_ShouldThrowResourceNotFoundException() {
         int creditCardId = 1;
         when(creditCardRepository.findById(creditCardId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
+        assertThrows(ResourceNotFoundException.class, () -> {
             creditCardService.findById(creditCardId);
         });
         verify(creditCardRepository).findById(creditCardId);
