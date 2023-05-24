@@ -37,6 +37,9 @@ public class OrderServiceImpl implements OrderService {
         );
         order.setCustomer(customer);
         order.setStatus(OrderStatus.NEW);
+         if (orderResponse.getLineItems().size() == 0)
+             throw new CustomerErrorException("Add at least one item!");
+
         order = orderRepository.save(order);
 
         for (OrderLineResponse orderLineResponse : orderResponse.getLineItems()) {
@@ -95,7 +98,6 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFoundException("Order", "Id", orderId);
 
         return modelMapper.map(order, OrderResponse.class);
-
     }
 
     @Override

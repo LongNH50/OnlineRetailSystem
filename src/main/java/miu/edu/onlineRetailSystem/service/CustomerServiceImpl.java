@@ -41,11 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = modelMapper.map(customerResponse, Customer.class);
         customer = customerRepository.save(customer);
 
-        CustomerResponse savedCustomerResponse = modelMapper.map(customer, CustomerResponse.class);
-//        savedCustomerResponse.setBillingAddress(customerResponse.getBillingAddress());
-//        addressService.save(savedCustomerResponse.getBillingAddress());
-
-        return savedCustomerResponse;
+        return modelMapper.map(customer, CustomerResponse.class);
     }
 
     @Override
@@ -85,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public AddressResponse saveCustomerAddress(int customerId, AddressResponse addressResponse) {
         CustomerResponse customerResponse = getCustomer(customerId);
-        addressResponse.setCustomerResponse(customerResponse);
+//        addressResponse.setCustomerResponse(customerResponse);
 
         return addressService.save(addressResponse);
     }
