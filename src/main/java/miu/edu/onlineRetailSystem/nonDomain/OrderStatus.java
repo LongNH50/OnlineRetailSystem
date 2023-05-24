@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.domain;
+package miu.edu.onlineRetailSystem.nonDomain;
 
 public enum OrderStatus {
     NEW,

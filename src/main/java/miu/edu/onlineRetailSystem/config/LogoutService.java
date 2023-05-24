@@ -3,7 +3,7 @@ package miu.edu.onlineRetailSystem.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import miu.edu.onlineRetailSystem.token.TokenRepository;
+import miu.edu.onlineRetailSystem.repository.TokenRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;

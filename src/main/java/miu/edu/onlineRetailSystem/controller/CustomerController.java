@@ -3,10 +3,10 @@ package miu.edu.onlineRetailSystem.controller;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +16,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")           // only admin allowed to see all customers.
     public ResponseEntity<?> findAll(Pageable pageable) {
         return new ResponseEntity<>(customerService.findAll(pageable), HttpStatus.OK);
     }

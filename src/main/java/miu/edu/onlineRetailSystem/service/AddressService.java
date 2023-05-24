@@ -1,7 +1,7 @@
 package miu.edu.onlineRetailSystem.service;
 
 import miu.edu.onlineRetailSystem.contract.AddressResponse;
-import miu.edu.onlineRetailSystem.domain.AddressType;
+import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 
 import java.util.Collection;
 import java.util.List;

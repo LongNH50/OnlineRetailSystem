@@ -1,11 +1,11 @@
-package miu.edu.onlineRetailSystem.token;
+package miu.edu.onlineRetailSystem.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import miu.edu.onlineRetailSystem.domain.Customer;
+import miu.edu.onlineRetailSystem.nonDomain.TokenType;
 
 @Data
 @Builder
