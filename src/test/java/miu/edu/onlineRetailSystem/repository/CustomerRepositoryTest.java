@@ -41,10 +41,8 @@ public class CustomerRepositoryTest {
         entityManager.persist(customer);
         entityManager.flush();
 
-        // Act
         Collection<CreditCard> result = customerRepository.findCreditCardByCustomer(customer.getId());
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.contains(creditCard1));
@@ -61,10 +59,8 @@ public class CustomerRepositoryTest {
         entityManager.persist(customer);
         entityManager.flush();
 
-        // Act
         CreditCard result = customerRepository.findCreditCardByCreditCardIdAndCustomer(customer.getId(), creditCard.getId());
 
-        // Assert
         assertNotNull(result);
         assertEquals(creditCard.getId(), result.getId());
         assertEquals(creditCard.getNumber(), result.getNumber());
@@ -86,14 +82,12 @@ public class CustomerRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        // Act
         Page<Review> result = customerRepository.findReviewsByCustomer(customer.getId(), pageable);
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.getTotalElements());
         assertTrue(result.getContent().contains(review1));
         assertTrue(result.getContent().contains(review2));
     }
-    // Add other tests for the findReviewsByCustomer method
+
 }
