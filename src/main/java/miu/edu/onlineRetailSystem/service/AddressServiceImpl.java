@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class AddressServiceImpl implements AddressService{
+public class AddressServiceImpl implements AddressService {
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -28,12 +28,31 @@ public class AddressServiceImpl implements AddressService{
     CustomerRepository customerRepository;
 
     @Override
-    public AddressResponse save(AddressResponse addressResponse) {
+    public AddressResponse save(int customerID, AddressResponse addressResponse) {
+        if (addressResponse.isDefaultShippingAddress())
+            changeDefaultShippingAddress(customerID);
+        else {
+            Address defaultAddress = addressRepository.findDefaultAddressByCustomer(customerID);
+            if (defaultAddress == null)
+                addressResponse.setDefaultShippingAddress(true);
+        }
         Address address = mapper.map(addressResponse, Address.class);
-
+        Customer customer = customerRepository.findById(customerID).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "Id", customerID)
+        );
+        address.setCustomer(customer);
         address = addressRepository.save(address);
 
         return mapper.map(address, AddressResponse.class);
+    }
+
+    private void changeDefaultShippingAddress(int customerId) {
+        Address address = addressRepository.findDefaultAddressByCustomer(customerId);
+
+        if (address != null) {
+            address.setDefaultShippingAddress(false);
+            addressRepository.save(address);
+        }
     }
 
     @Override
@@ -58,7 +77,7 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public List<AddressResponse> getShippingAddressByCustomerId(Integer customerId , AddressType addressType) {
+    public List<AddressResponse> getShippingAddressByCustomerId(Integer customerId, AddressType addressType) {
         Customer foundCustomer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", "Id", customerId));
 
@@ -67,16 +86,19 @@ public class AddressServiceImpl implements AddressService{
                 .collect(Collectors.toList());
 
     }
+
     @Override
-    public AddressResponse getBillingAddressByCustomerId(Integer customerId , AddressType addressType) {
+    public AddressResponse getBillingAddressByCustomerId(Integer customerId, AddressType addressType) {
         Customer foundCustomer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-        return mapper.map(addressRepository.getBillingAddressByCustomerId(customerId,addressType), AddressResponse.class);
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "Id", customerId));
+
+        return mapper.map(addressRepository.getBillingAddressByCustomerId(customerId, addressType), AddressResponse.class);
 
     }
 
     @Override
     public Collection<AddressResponse> getAddresses(int customerId) {
+
         return addressRepository.findByCustomer(customerId)
                 .stream()
                 .map(address -> mapper.map(address, AddressResponse.class))

@@ -2,10 +2,10 @@ package miu.edu.onlineRetailSystem.service;
 
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
-import miu.edu.onlineRetailSystem.domain.CreditCard;
-import miu.edu.onlineRetailSystem.domain.Customer;
+import miu.edu.onlineRetailSystem.domain.*;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
+import miu.edu.onlineRetailSystem.repository.AddressRepository;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -81,10 +82,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public AddressResponse saveCustomerAddress(int customerId, AddressResponse addressResponse) {
-        CustomerResponse customerResponse = getCustomer(customerId);
-        addressResponse.setCustomerResponse(customerResponse);
 
-        return addressService.save(addressResponse);
+        return addressService.save(customerId, addressResponse);
     }
 
     @Override
@@ -243,5 +242,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ReviewResponse getCustomerOrderReviewWithReviewId(int customerId, int orderId, int reviewId) {
         return orderService.getReviewByIdAndCustomerAndOrder(customerId, orderId, reviewId);
+    }
+
+    @Override
+    public Collection<AddressResponse> getCustomerShippingAddresses(int customerId) {
+        return addressService.getShippingAddressByCustomerId(customerId, AddressType.SHIPPING_ADDRESS);
     }
 }

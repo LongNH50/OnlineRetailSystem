@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface AddressService {
-    public AddressResponse save(AddressResponse addressResponse);
+    public AddressResponse save(int customerID,AddressResponse addressResponse);
 
     /**
      * Save shipping address

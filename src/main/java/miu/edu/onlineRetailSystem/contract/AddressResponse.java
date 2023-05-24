@@ -20,4 +20,6 @@ public class AddressResponse {
 
     private AddressType addressType;
 
+    private boolean isDefaultShippingAddress = false;
+
 }

@@ -19,8 +19,11 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
     Address getBillingAddressByCustomerId(@Param("customerId") Integer customerId, @Param("billingAddress") AddressType billingAddress);
 
     @Query("select a from Address a where a.customer.id = :customerId")
-    Collection<AddressResponse> findByCustomer(@Param("customerId") int customerId);
+    Collection<Address> findByCustomer(@Param("customerId") int customerId);
 
     @Query("select a from Address a where a.customer.id = :customerId and a.id = :addressId")
     Address findByIdAndCustomer(@Param("customerId") int customerId, @Param("addressId") int addressId);
+
+    @Query("select a from Address a where a.customer.id = :customerId and a.isDefaultShippingAddress = true")
+    Address findDefaultAddressByCustomer(@Param("customerId") int customerId);
 }

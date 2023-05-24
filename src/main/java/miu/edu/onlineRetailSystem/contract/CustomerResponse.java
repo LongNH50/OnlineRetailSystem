@@ -22,7 +22,7 @@ public class CustomerResponse {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private AddressResponse billingAddress;
+//    private AddressResponse billingAddress;
 
     private List<AddressResponse> shippingAddresses = new ArrayList<>();
 
@@ -30,13 +30,5 @@ public class CustomerResponse {
 
     List<ReviewResponse> reviewResponses = new ArrayList<>();
 
-    private AddressResponse defaultShippingAddress;
-
-    public void addCreditCartResponse(CreditCardResponse creditCardResponse) {
-        this.creditCards.add(creditCardResponse);
-    }
-
-    public void addReviewResponse(ReviewResponse reviewResponse) {
-        this.reviewResponses.add(reviewResponse);
-    }
+//    private AddressResponse defaultShippingAddress;
 }
