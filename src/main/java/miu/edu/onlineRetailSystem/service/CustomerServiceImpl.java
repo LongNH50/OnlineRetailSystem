@@ -3,6 +3,7 @@ package miu.edu.onlineRetailSystem.service;
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
+import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.AddressRepository;
