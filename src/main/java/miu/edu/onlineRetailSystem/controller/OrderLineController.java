@@ -5,10 +5,7 @@ import miu.edu.onlineRetailSystem.service.OrderLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +24,18 @@ public class OrderLineController {
     @GetMapping("/{orderLineId}")
     public ResponseEntity<OrderLineResponse> getOrderLine(@PathVariable("orderLineId") int id) {
         OrderLineResponse orderLine = orderLineService.findById(id);
-        System.out.println(orderLine);
+        return new ResponseEntity<>(orderLine, HttpStatus.OK);
+    }
+
+    @PutMapping("/{orderLineId}")
+    public ResponseEntity<OrderLineResponse> updateOrderLine(@PathVariable("orderLineId") int id, @RequestBody OrderLineResponse orderLineResponse) {
+        OrderLineResponse orderLine = orderLineService.update(id, orderLineResponse);
+        return new ResponseEntity<>(orderLine, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderLineResponse> saveOrderLine(@RequestBody OrderLineResponse orderLineResponse) {
+        OrderLineResponse orderLine = orderLineService.save(orderLineResponse);
         return new ResponseEntity<>(orderLine, HttpStatus.OK);
     }
 }
