@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miu.edu.onlineRetailSystem.domain.Address;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,15 @@ public class CustomerResponse {
 
     private List<CreditCardResponse> creditCards = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "buyer")
     List<ReviewResponse> reviewResponses = new ArrayList<>();
+
+    private AddressResponse defaultShippingAddress;
+
+    public void addCreditCartResponse(CreditCardResponse creditCardResponse) {
+        this.creditCards.add(creditCardResponse);
+    }
+
+    public void addReviewResponse(ReviewResponse reviewResponse) {
+        this.reviewResponses.add(reviewResponse);
+    }
 }

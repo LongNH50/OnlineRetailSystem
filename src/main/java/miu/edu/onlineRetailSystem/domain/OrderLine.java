@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class OrderLine {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderLineID")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "itemID")
     private Item item;
 
