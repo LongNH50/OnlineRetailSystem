@@ -12,7 +12,6 @@ public class OrderLineResponse {
     private int id;
 
     private ItemResponse item;
-
     private int quantity;
     private double discount;
 

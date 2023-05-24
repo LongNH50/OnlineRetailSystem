@@ -8,7 +8,7 @@ public interface OrderLineService {
 
     OrderLineResponse findById(int orderLineId);
 
-    OrderLineResponse save(OrderLineResponse orderLineResponse);
+    OrderLineResponse save(int orderId, OrderLineResponse orderLineResponse);
 
     OrderLineResponse update(int orderLineId, OrderLineResponse orderLineResponse);
 

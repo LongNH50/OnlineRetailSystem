@@ -5,20 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "addressTypes")
-public class AddressType {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "addressTypeID")
-    private Integer id;
-    private String name;
-
-    public AddressType(String name) {
-        this.name = name;
-    }
+public enum AddressType {
+    BILLING_ADDRESS,
+    SHIPPING_ADDRESS
 }
