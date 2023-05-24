@@ -29,18 +29,30 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressResponse save(int customerID, AddressResponse addressResponse) {
+        if (addressResponse.isDefaultShippingAddress())
+            changeDefaultShippingAddress(customerID);
+        else {
+            Address defaultAddress = addressRepository.findDefaultAddressByCustomer(customerID);
+            if (defaultAddress == null)
+                addressResponse.setDefaultShippingAddress(true);
+        }
         Address address = mapper.map(addressResponse, Address.class);
         Customer customer = customerRepository.findById(customerID).orElseThrow(
                 () -> new ResourceNotFoundException("Customer", "Id", customerID)
         );
         address.setCustomer(customer);
         address = addressRepository.save(address);
-        if (customer.getDefaultShippingAddress() == null){
-            customer.setDefaultShippingAddress(address);
-            customerRepository.save(customer);
-        }
 
         return mapper.map(address, AddressResponse.class);
+    }
+
+    private void changeDefaultShippingAddress(int customerId) {
+        Address address = addressRepository.findDefaultAddressByCustomer(customerId);
+
+        if (address != null) {
+            address.setDefaultShippingAddress(false);
+            addressRepository.save(address);
+        }
     }
 
     @Override
@@ -78,23 +90,19 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressResponse getBillingAddressByCustomerId(Integer customerId, AddressType addressType) {
         Customer foundCustomer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "Id", customerId));
+
         return mapper.map(addressRepository.getBillingAddressByCustomerId(customerId, addressType), AddressResponse.class);
 
     }
 
     @Override
     public Collection<AddressResponse> getAddresses(int customerId) {
-        Collection<AddressResponse> responses = addressRepository.findByCustomer(customerId)
+
+        return addressRepository.findByCustomer(customerId)
                 .stream()
                 .map(address -> mapper.map(address, AddressResponse.class))
                 .toList();
-        for (AddressResponse addr : responses
-        ) {
-            System.out.println(addr);
-
-        }
-        return responses;
     }
 
     @Override

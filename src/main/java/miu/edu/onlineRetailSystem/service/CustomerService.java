@@ -65,4 +65,6 @@ public interface CustomerService {
     ReviewResponse deleteCustomerOrderReview(int customerId, int orderId, int reviewId);
 
     ReviewResponse getCustomerOrderReviewWithReviewId(int customerId, int orderId, int reviewId);
+
+    Collection<AddressResponse> getCustomerShippingAddresses(int customerId);
 }

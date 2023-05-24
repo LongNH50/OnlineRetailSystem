@@ -17,7 +17,7 @@ public class OrderLine {
     @Column(name = "orderLineID")
     private int id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "itemID")
     private Item item;
 

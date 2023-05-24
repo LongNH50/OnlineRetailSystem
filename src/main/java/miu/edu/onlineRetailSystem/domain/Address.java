@@ -20,6 +20,7 @@ public class Address {
     private String city;
     private String state;
     private String zipCode;
+    private boolean isDefaultShippingAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerID")

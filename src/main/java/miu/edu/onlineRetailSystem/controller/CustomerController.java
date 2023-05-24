@@ -81,9 +81,9 @@ public class CustomerController {
 
     @GetMapping("/{customerId}/shipping-addresses")
     public ResponseEntity<?> getCustomerShippingAddresses(@PathVariable int customerId) {
-        // todo: to implement later
 
-        return null;
+        return new ResponseEntity<>(customerService.getCustomerShippingAddresses(customerId),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{customerId}/credit-cards")
