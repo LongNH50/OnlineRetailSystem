@@ -2,7 +2,7 @@ package miu.edu.onlineRetailSystem.repository;
 
 import miu.edu.onlineRetailSystem.domain.Order;
 import miu.edu.onlineRetailSystem.domain.OrderLine;
-import miu.edu.onlineRetailSystem.domain.OrderStatus;
+import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.domain.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

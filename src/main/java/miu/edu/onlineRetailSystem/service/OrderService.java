@@ -3,8 +3,7 @@ package miu.edu.onlineRetailSystem.service;
 import miu.edu.onlineRetailSystem.contract.OrderLineResponse;
 import miu.edu.onlineRetailSystem.contract.OrderResponse;
 import miu.edu.onlineRetailSystem.contract.ReviewResponse;
-import miu.edu.onlineRetailSystem.domain.OrderLine;
-import miu.edu.onlineRetailSystem.domain.OrderStatus;
+import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
