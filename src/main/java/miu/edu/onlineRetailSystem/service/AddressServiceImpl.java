@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class AddressServiceImpl implements AddressService{
+public class AddressServiceImpl implements AddressService {
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -28,10 +28,17 @@ public class AddressServiceImpl implements AddressService{
     CustomerRepository customerRepository;
 
     @Override
-    public AddressResponse save(AddressResponse addressResponse) {
+    public AddressResponse save(int customerID, AddressResponse addressResponse) {
         Address address = mapper.map(addressResponse, Address.class);
-
+        Customer customer = customerRepository.findById(customerID).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "Id", customerID)
+        );
+        address.setCustomer(customer);
         address = addressRepository.save(address);
+        if (customer.getDefaultShippingAddress() == null){
+            customer.setDefaultShippingAddress(address);
+            customerRepository.save(customer);
+        }
 
         return mapper.map(address, AddressResponse.class);
     }
@@ -58,7 +65,7 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public List<AddressResponse> getShippingAddressByCustomerId(Integer customerId , AddressType addressType) {
+    public List<AddressResponse> getShippingAddressByCustomerId(Integer customerId, AddressType addressType) {
         Customer foundCustomer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", "Id", customerId));
 
@@ -67,20 +74,27 @@ public class AddressServiceImpl implements AddressService{
                 .collect(Collectors.toList());
 
     }
+
     @Override
-    public AddressResponse getBillingAddressByCustomerId(Integer customerId , AddressType addressType) {
+    public AddressResponse getBillingAddressByCustomerId(Integer customerId, AddressType addressType) {
         Customer foundCustomer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-        return mapper.map(addressRepository.getBillingAddressByCustomerId(customerId,addressType), AddressResponse.class);
+        return mapper.map(addressRepository.getBillingAddressByCustomerId(customerId, addressType), AddressResponse.class);
 
     }
 
     @Override
     public Collection<AddressResponse> getAddresses(int customerId) {
-        return addressRepository.findByCustomer(customerId)
+        Collection<AddressResponse> responses = addressRepository.findByCustomer(customerId)
                 .stream()
                 .map(address -> mapper.map(address, AddressResponse.class))
                 .toList();
+        for (AddressResponse addr : responses
+        ) {
+            System.out.println(addr);
+
+        }
+        return responses;
     }
 
     @Override

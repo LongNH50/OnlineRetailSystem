@@ -84,10 +84,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public AddressResponse saveCustomerAddress(int customerId, AddressResponse addressResponse) {
-        CustomerResponse customerResponse = getCustomer(customerId);
-        addressResponse.setCustomerResponse(customerResponse);
+//        CustomerResponse customerResponse = getCustomer(customerId);
+//        addressResponse.setCustomerResponse(customerResponse);
+//        customerResponse.setDefaultShippingAddress(addressResponse);
+//        addressResponse.setCustomerResponse(customerResponse);
 
-        return addressService.save(addressResponse);
+        return addressService.save(customerId,addressResponse);
     }
 
     @Override
