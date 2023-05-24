@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class EmailEvent {
-    private String to;
-    private String message;
+public class ShipOrderEvent {
+    private int customerId;
+    private int orderId;
 }

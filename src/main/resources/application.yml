@@ -26,7 +26,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNewWithJWT
     username: postgres
-    password: test123
+    password: AdCool386259@
     driverClassName: org.postgresql.Driver
   h2:
     console.enabled: true

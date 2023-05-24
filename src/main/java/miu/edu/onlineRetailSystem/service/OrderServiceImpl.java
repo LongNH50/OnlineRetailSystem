@@ -84,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
         order = orderRepository.save(order);
 
         publisher.publishEvent(new ProcessEvent(customerId, orderId));
+
         return modelMapper.map(order, OrderResponse.class);
     }
 
