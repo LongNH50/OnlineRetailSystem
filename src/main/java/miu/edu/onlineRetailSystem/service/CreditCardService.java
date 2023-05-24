@@ -6,11 +6,13 @@ import miu.edu.onlineRetailSystem.domain.CreditCard;
 import java.util.Optional;
 
 public interface CreditCardService {
-    CreditCardResponse save(CreditCardResponse creditCardResponse);
+    CreditCardResponse save(int customerId, CreditCardResponse creditCardResponse);
 
     CreditCardResponse update(int creditCardId, CreditCardResponse creditCardResponse);
 
     CreditCardResponse remove(int id);
 
     CreditCardResponse findById(int id);
+
+//    CreditCardResponse getCreditCard(int customerId, int creditCardId);
 }

@@ -21,7 +21,7 @@ public class Order {
     private int id;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "customerID")
+    @JoinColumn(name = "customerID", nullable = false)
     private Customer customer;
 
     @OneToOne
@@ -31,9 +31,12 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany(cascade = CascadeType.PERSIST )
+    @OneToMany
     @JoinColumn(name = "orderID")
     private List<OrderLine> lineItems = new ArrayList<>();
 
+    public void addOrderLine(OrderLine orderLine) {
+        this.lineItems.add(orderLine);
+    }
 
 }

@@ -3,6 +3,7 @@ package miu.edu.onlineRetailSystem.contract;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miu.edu.onlineRetailSystem.domain.AddressType;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +15,9 @@ public class AddressResponse {
     private String city;
     private String state;
     private String zipCode;
-    private boolean isDefault;
 
     private CustomerResponse customerResponse;
 
-    private AddressTypeResponse addressTypeResponse;
-
+    private AddressType addressType;
 
 }

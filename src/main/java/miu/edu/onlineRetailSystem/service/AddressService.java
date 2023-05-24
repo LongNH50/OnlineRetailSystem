@@ -1,21 +1,27 @@
 package miu.edu.onlineRetailSystem.service;
 
 import miu.edu.onlineRetailSystem.contract.AddressResponse;
-import miu.edu.onlineRetailSystem.contract.AddressTypeResponse;
-import miu.edu.onlineRetailSystem.domain.Address;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Service;
+import miu.edu.onlineRetailSystem.domain.AddressType;
 
+import java.util.Collection;
 import java.util.List;
-@Service
+
 public interface AddressService {
-    public void save(Address address);
-    Address update(int addressId, Address address);
+    public AddressResponse save(AddressResponse addressResponse);
 
-    void deleteAddressById(int id);
-    List<AddressResponse> getShippingAddressByCustomerId(Integer customerId, String shippingAddress);
-    AddressResponse getBillingAddressByCustomerId(Integer customerId, String billingAddress);
+    /**
+     * Save shipping address
+     * @param addressId
+     * @param addressResponse
+     * @return
+     */
+    AddressResponse update(int customer, int addressId, AddressResponse addressResponse);
 
+    void delete(int customerId, int addressId);
+    List<AddressResponse> getShippingAddressByCustomerId(Integer customerId, AddressType shippingAddress);
+    AddressResponse getBillingAddressByCustomerId(Integer customerId, AddressType billingAddress);
 
+    Collection<AddressResponse> getAddresses(int customerId);
+
+    AddressResponse getAddress(int customerId, int addressId);
 }
