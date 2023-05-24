@@ -33,4 +33,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("select r from Order o join o.customer.reviews r where o.customer.id = :customerId and o.id = :orderId and r.id = :reviewId")
     Review findReviewByIdAndCustomerAndOrder(@Param("customerId") int customerId, @Param("orderId") int orderId, @Param("reviewId") int reviewId);
+
+    @Query("update Order o set o.status = :orderStatus where o.customer.id =:customerId and o.id =:orderId")
+    void updateOrderStatus(@Param("orderId") int orderId, @Param("customerId") int customerId, @Param("orderStatus") OrderStatus orderStatus);
 }

@@ -1,6 +1,7 @@
 package miu.edu.onlineRetailSystem.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,13 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "creditCardID")
     private int id;
+
+    @NotNull
     private String number;
+    @NotNull
     private LocalDateTime expirationDate;
+
+    @NotNull
     private String securityCode;
 
     public CreditCard(String number, LocalDateTime expirationDate, String securityCode) {

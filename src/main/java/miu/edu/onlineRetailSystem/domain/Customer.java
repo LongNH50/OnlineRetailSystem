@@ -1,6 +1,7 @@
 package miu.edu.onlineRetailSystem.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,20 +20,15 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customerID")
     private int id;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
+    @NotNull
     private String email;
-
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "billingAddressID")
-//    private Address billingAddress;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Address> shippingAddresses = new ArrayList<>();
-
-//    @OneToOne
-//    @JoinColumn(name = "defaultShippingAddressID")
-//    private Address defaultShippingAddress;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "customerID", nullable = false)

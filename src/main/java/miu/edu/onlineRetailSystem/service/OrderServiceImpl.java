@@ -1,5 +1,7 @@
 package miu.edu.onlineRetailSystem.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
@@ -12,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -62,6 +65,15 @@ public class OrderServiceImpl implements OrderService {
         order = orderRepository.save(order);
 
         return modelMapper.map(order, OrderResponse.class);
+    }
+    @KafkaListener(topics = "changeOrderStatus2")
+    public void updateKafka(String orderDetails) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        OrderUpdation orderUpdation = objectMapper.readValue(orderDetails, OrderUpdation.class);
+        // update status set status = DELIVERED where status = NEW
+        System.out.println("receiving: ....");
+        orderRepository.updateOrderStatus(orderUpdation.getOrderId(), orderUpdation.getCustomerId(), orderUpdation.getOrderStatus());
     }
 
     @Override
