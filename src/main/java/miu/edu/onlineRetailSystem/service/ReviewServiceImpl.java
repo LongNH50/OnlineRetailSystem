@@ -63,7 +63,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public ReviewResponse view(int reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->new ResourceNotFoundException("review","review",reviewId));
         ReviewResponse reviewResponse = mapper.map(review, ReviewResponse.class);
         return reviewResponse;
     }
@@ -73,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public ReviewResponse remove(int id) {
 
-        Review review = reviewRepository.findById(id).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        Review review = reviewRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("review","review",id));
         reviewRepository.delete(review);
         ReviewResponse reviewResponse = mapper.map(review, ReviewResponse.class);
         return reviewResponse;
@@ -81,7 +81,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public ReviewResponse findById(int id) {
-        Review review = reviewRepository.findById(id).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        Review review = reviewRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("review","review",id));;
         ReviewResponse reviewResponse = mapper.map(review, ReviewResponse.class);
         return reviewResponse;
     }
