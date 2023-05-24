@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ReviewService {
-    ReviewResponse save(ReviewResponse reviewResponse);
+    ReviewResponse save(int customerId, int itemId, ReviewResponse reviewResponse);
 
     ReviewResponse update(int reviewId, ReviewResponse reviewResponse);
 

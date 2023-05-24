@@ -1,12 +1,11 @@
 package miu.edu.onlineRetailSystem.service;
 
 import jakarta.transaction.Transactional;
-import miu.edu.onlineRetailSystem.contract.OrderResponse;
-import miu.edu.onlineRetailSystem.contract.OrderStatusResponse;
-import miu.edu.onlineRetailSystem.domain.Order;
-import miu.edu.onlineRetailSystem.domain.OrderLine;
-import miu.edu.onlineRetailSystem.domain.OrderStatus;
-import miu.edu.onlineRetailSystem.exceptionHandlers.CustomerException;
+import miu.edu.onlineRetailSystem.contract.*;
+import miu.edu.onlineRetailSystem.domain.*;
+import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
+import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
+import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,63 +13,74 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Collection;
 
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private OrderLineService orderLineService;
 
     @Override
-    public OrderResponse save(OrderResponse orderResponse) {
+    public OrderResponse save(int customerId, OrderResponse orderResponse) {
         Order order = modelMapper.map(orderResponse, Order.class);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "Id", customerId)
+        );
+        order.setCustomer(customer);
         order.setStatus(OrderStatus.NEW);
+        order = orderRepository.save(order);
+
+        for (OrderLineResponse orderLineResponse : orderResponse.getLineItems()) {
+            orderLineService.save(order.getId(), orderLineResponse);
+        }
+
+        return modelMapper.map(order, OrderResponse.class);
+    }
+
+    @Override
+    public OrderResponse update(int customerId, int orderId, OrderResponse orderResponse) {
+        Order order = orderRepository.findByIdAndStatusAndCustomer(customerId, orderId, OrderStatus.NEW);
+        if (order == null || orderResponse.getId() != orderId)
+            throw new ResourceNotFoundException("Order", "Id", orderId);
+
+        order = modelMapper.map(orderResponse, Order.class);
         order = orderRepository.save(order);
 
         return modelMapper.map(order, OrderResponse.class);
     }
 
     @Override
-    public OrderResponse update(int orderId, OrderResponse orderResponse) {
-        Order order = orderRepository.findByIdAndStatus(orderId, OrderStatus.NEW);
-        if (order != null && orderResponse.getId() == orderId) {
-            order = modelMapper.map(orderResponse, Order.class);
-            order = orderRepository.save(order);
+    public OrderResponse placeOrder(int customerId, int orderId) {
+        Order order = orderRepository.findByIdAndStatusAndCustomer(customerId, orderId, OrderStatus.NEW);
+        if (order == null)
+            throw new ResourceNotFoundException("Order", "Id", orderId);
 
-            return modelMapper.map(order, OrderResponse.class);
-        }
-        return null;
+        updateStock(order);
+        order.setStatus(OrderStatus.PLACED);
+        order = orderRepository.save(order);
+
+        return modelMapper.map(order, OrderResponse.class);
     }
 
     @Override
-    public OrderResponse placeOrder(int orderId) throws CustomerException {
-        Optional<Order> orderOptional = orderRepository.findById(orderId);
-        if (orderOptional.isPresent()) {
-            Order order = orderOptional.get();
-            updateStock(order);
-            order.setStatus(OrderStatus.PLACED);
-            order = orderRepository.save(order);
+    public OrderResponse updateStatus(int customerId, int orderId, OrderStatus orderStatus) {
+        Order order = orderRepository.findByIdAndCustomer(customerId, orderId);
+        if (order == null)
+            throw new ResourceNotFoundException("Order", "Id", orderId);
 
-            return modelMapper.map(order, OrderResponse.class);
-        }
-        return null;
-    }
+        order.setStatus(orderStatus);
+        order = orderRepository.save(order);
 
-    @Override
-    public OrderResponse updateStatus(int orderId, OrderStatusResponse orderStatusResponse) {
-        Optional<Order> orderOptional = orderRepository.findById(orderId);
-        if (orderOptional.isPresent()) {
-            OrderStatus orderStatus = modelMapper.map(orderStatusResponse, OrderStatus.class);
-            Order order = orderOptional.get();
-            order.setStatus(orderStatus);
-            order = orderRepository.save(order);
-
-            return modelMapper.map(order, OrderResponse.class);
-        }
-        return null;
+        return modelMapper.map(order, OrderResponse.class);
     }
 
     @Override
@@ -79,19 +89,57 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse getOrder(int orderId) {
-        Optional<Order> orderOptional = orderRepository.findById(orderId);
+    public OrderResponse getOrder(int customerId, int orderId) {
+        Order order = orderRepository.findByIdAndCustomer(customerId, orderId);
+        if (order == null)
+            throw new ResourceNotFoundException("Order", "Id", orderId);
 
-        return orderOptional.map(order -> modelMapper.map(order, OrderResponse.class)).orElse(null);
+        return modelMapper.map(order, OrderResponse.class);
 
     }
 
-    private void updateStock(Order order) throws CustomerException {
+    @Override
+    public Collection<OrderLineResponse> getCustomerOrderLines(int customerId, int orderId) {
+        return orderRepository.findOrderLinesByCustomer(customerId, orderId)
+                .stream()
+                .map(orderLine -> modelMapper.map(orderLine, OrderLineResponse.class))
+                .toList();
+    }
+
+    @Override
+    public OrderLineResponse getCustomerOrderLine(int customerId, int orderId, int orderLineId) {
+        OrderLine orderLine = orderRepository.findOrderLineByIdAndCustomerAndOrder(customerId, orderId, orderLineId);
+        if (orderLine == null)
+            throw new ResourceNotFoundException("OrderLine", "Id", orderLineId);
+
+        return modelMapper.map(orderLine, OrderLineResponse.class);
+    }
+
+    @Override
+    public ReviewResponse getReviewByCustomerAndOrder(int customerId, int orderId, int reviewId) {
+        Review review = orderRepository.findReviewByCustomerAndOrder(customerId, orderId, reviewId);
+
+        if (review == null)
+            throw new ResourceNotFoundException("Review", "orderId", orderId);
+
+        return modelMapper.map(review, ReviewResponse.class);
+    }
+
+    @Override
+    public ReviewResponse getReviewByIdAndCustomerAndOrder(int customerId, int orderId, int reviewId) {
+        Review review = orderRepository.findReviewByIdAndCustomerAndOrder(customerId, orderId, reviewId);
+        if (review == null)
+            throw new ResourceNotFoundException("Review", "Id", reviewId);
+
+        return modelMapper.map(review, ReviewResponse.class);
+    }
+
+    private void updateStock(Order order) {
 
         for (OrderLine orderLine : order.getLineItems()) {
             int inStock = orderLine.getItem().getQuantityInStock();
             int quantity = orderLine.getQuantity();
-            if (quantity > inStock) throw new CustomerException("Quantity of " + orderLine.getItem().getName() +
+            if (quantity > inStock) throw new CustomerErrorException("Quantity of " + orderLine.getItem().getName() +
                     " is greater than the quantity in stock");
             orderLine.getItem().setQuantityInStock(inStock - quantity);
         }

@@ -1,9 +1,13 @@
 package miu.edu.onlineRetailSystem.service;
 
 import miu.edu.onlineRetailSystem.contract.OrderLineResponse;
+import miu.edu.onlineRetailSystem.domain.Item;
+import miu.edu.onlineRetailSystem.domain.Order;
 import miu.edu.onlineRetailSystem.domain.OrderLine;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
+import miu.edu.onlineRetailSystem.repository.ItemRepository;
 import miu.edu.onlineRetailSystem.repository.OrderLineRepository;
+import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,10 @@ public class OrderLineServiceImpl implements OrderLineService {
 
     @Autowired
     private OrderLineRepository orderLineRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Override
     public OrderLineResponse findById(int orderLineId) {
@@ -32,8 +40,17 @@ public class OrderLineServiceImpl implements OrderLineService {
     }
 
     @Override
-    public OrderLineResponse save(OrderLineResponse orderLineResponse) {
+    public OrderLineResponse save(int orderId, OrderLineResponse orderLineResponse) {
         OrderLine orderLine = mapper.map(orderLineResponse, OrderLine.class);
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new ResourceNotFoundException("Order", "Id", orderId)
+        );
+        int itemId = orderLineResponse.getItem().getId();
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new ResourceNotFoundException("Item", "Id", itemId)
+        );
+        order.getLineItems().add(orderLine);
+        orderLine.setItem(item);
         OrderLine savedOrderLine = orderLineRepository.save(orderLine);
         return mapper.map(savedOrderLine, OrderLineResponse.class);
     }
@@ -46,10 +63,13 @@ public class OrderLineServiceImpl implements OrderLineService {
         );
 
         OrderLine newOrderLine = mapper.map(orderLineResponse, OrderLine.class);
-
+        int itemId = orderLineResponse.getItem().getId();
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new ResourceNotFoundException("Item", "Id", itemId)
+        );
         orderLine.setDiscount(newOrderLine.getDiscount());
         orderLine.setQuantity(newOrderLine.getQuantity());
-        orderLine.setItem(newOrderLine.getItem());
+        orderLine.setItem(item);
 
         OrderLine savedOrderLine = orderLineRepository.save(orderLine);
         return mapper.map(savedOrderLine, OrderLineResponse.class);
