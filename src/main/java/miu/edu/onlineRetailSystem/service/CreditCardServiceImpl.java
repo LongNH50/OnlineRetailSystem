@@ -3,8 +3,10 @@ package miu.edu.onlineRetailSystem.service;
 import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.CreditCardResponse;
 import miu.edu.onlineRetailSystem.domain.CreditCard;
+import miu.edu.onlineRetailSystem.domain.Customer;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.CreditCardRepository;
+import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,23 @@ public class CreditCardServiceImpl implements CreditCardService{
     private ModelMapper mapper;
 
     @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
     private CreditCardRepository creditCardRepository;
     @Override
-    public CreditCardResponse save(CreditCardResponse creditCardResponse) {
+    public CreditCardResponse save(int customerId, CreditCardResponse creditCardResponse) {
 
         CreditCard creditCard = mapper.map(creditCardResponse, CreditCard.class);
 
+        Customer customer = customerRepository.findById(customerId).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "Id", customerId)
+        );
+
+        customer.getCreditCards().add(creditCard);
+
         creditCardRepository.save(creditCard);
+
         return creditCardResponse;
     }
 

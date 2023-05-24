@@ -1,7 +1,6 @@
 package miu.edu.onlineRetailSystem.controller;
 
 import miu.edu.onlineRetailSystem.contract.*;
-import miu.edu.onlineRetailSystem.exceptionHandlers.CustomerException;
 import miu.edu.onlineRetailSystem.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,8 +23,6 @@ public class CustomerController {
     @GetMapping("/{customerId}")
     public ResponseEntity<?> getCustomer(@PathVariable int customerId) {
         CustomerResponse customerResponse = customerService.getCustomer(customerId);
-        if (customerResponse == null)
-            return new ResponseEntity<>(new CustomerException("Customer does not exist!"), HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(customerResponse, HttpStatus.OK);
     }
@@ -155,6 +152,13 @@ public class CustomerController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/{customerId}/orders/{orderId}/place")
+    public ResponseEntity<?> placeCustomerOrder(@PathVariable int customerId,
+                                                @PathVariable int orderId) {
+        return new ResponseEntity<>(customerService.placeCustomerOrder(customerId, orderId),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/{customerId}/orders/{orderId}/order-lines")
     public ResponseEntity<?> getCustomerOrderLines(@PathVariable int customerId,
                                                    @PathVariable int orderId) {
@@ -195,27 +199,30 @@ public class CustomerController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{customerId}/orders/{orderId}/review")
+    @GetMapping("/{customerId}/orders/{orderId}/review/{reviewId}")
     public ResponseEntity<?> getCustomerOrderReview(@PathVariable int customerId,
-                                                    @PathVariable int orderId) {
-        return new ResponseEntity<>(customerService.getCustomerOrderReview(customerId, orderId),
+                                                    @PathVariable int orderId,
+                                                    @PathVariable int reviewId) {
+        return new ResponseEntity<>(customerService.getCustomerOrderReview(customerId, orderId, reviewId),
                 HttpStatus.OK);
     }
 
-    @PostMapping("/{customerId}/orders/{orderId}/review")
-    public ResponseEntity<?> saveCustomerOrderReview(@PathVariable int customerId,
+    @PostMapping("/{customerId}/orders/{orderId}/item/{itemId}/review")
+    public ResponseEntity<?> saveCustomerOrderItemReview(@PathVariable int customerId,
                                                      @PathVariable int orderId,
+                                                     @PathVariable int itemId,
                                                      @RequestBody ReviewResponse reviewResponse) {
-        return new ResponseEntity<>(customerService.saveCustomerOrderReview(customerId, orderId, reviewResponse),
+        return new ResponseEntity<>(customerService.saveCustomerOrderItemReview(customerId, orderId, itemId, reviewResponse),
                 HttpStatus.CREATED);
     }
 
-    @PutMapping("/{customerId}/orders/{orderId}/review/{reviewId}")
+    @PutMapping("/{customerId}/orders/{orderId}/item/{itemId}/review/{reviewId}")
     public ResponseEntity<?> updateCustomerOrderReview(@PathVariable int customerId,
                                                        @PathVariable int orderId,
                                                        @PathVariable int reviewId,
+                                                       @PathVariable int itemId,
                                                        @RequestBody ReviewResponse reviewResponse) {
-        return new ResponseEntity<>(customerService.updateCustomerOrderReview(customerId, orderId, reviewId, reviewResponse),
+        return new ResponseEntity<>(customerService.updateCustomerOrderReview(customerId, orderId, itemId, reviewId, reviewResponse),
                 HttpStatus.OK);
     }
 

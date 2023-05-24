@@ -35,7 +35,7 @@ public class Customer {
     private Address defaultShippingAddress;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customerID")
+    @JoinColumn(name = "customerID", nullable = false)
     private List<CreditCard> creditCards = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.PERSIST)

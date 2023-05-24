@@ -30,8 +30,6 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public AddressResponse save(AddressResponse addressResponse) {
         Address address = mapper.map(addressResponse, Address.class);
-//        AddressType addressType = addressTypeRepository.findByName("shippingAddress");
-//        address.setAddressType(addressType);
 
         address = addressRepository.save(address);
 

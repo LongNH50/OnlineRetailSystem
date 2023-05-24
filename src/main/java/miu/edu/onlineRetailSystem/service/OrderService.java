@@ -5,7 +5,6 @@ import miu.edu.onlineRetailSystem.contract.OrderResponse;
 import miu.edu.onlineRetailSystem.contract.ReviewResponse;
 import miu.edu.onlineRetailSystem.domain.OrderLine;
 import miu.edu.onlineRetailSystem.domain.OrderStatus;
-import miu.edu.onlineRetailSystem.exceptionHandlers.CustomerException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,7 +12,7 @@ import java.util.Collection;
 
 public interface OrderService {
 
-    OrderResponse save(OrderResponse orderResponse);
+    OrderResponse save(int customerId, OrderResponse orderResponse);
 
     OrderResponse update(int customerId, int orderId, OrderResponse orderResponse);
 
@@ -25,7 +24,7 @@ public interface OrderService {
      * @return
      * @throws CustomerException
      */
-    OrderResponse placeOrder(int orderId) throws CustomerException;
+    OrderResponse placeOrder(int customerId, int orderId);
 
     OrderResponse updateStatus(int customerId, int orderId, OrderStatus orderStatus);
 
@@ -36,7 +35,7 @@ public interface OrderService {
     Collection<OrderLineResponse> getCustomerOrderLines(int customerId, int orderId);
     OrderLineResponse getCustomerOrderLine(int customerId, int orderId, int orderLineId);
 
-    ReviewResponse getReviewByCustomerAndOrder(int customer, int orderId);
+    ReviewResponse getReviewByCustomerAndOrder(int customer, int orderId, int reviewId);
 
     ReviewResponse getReviewByIdAndCustomerAndOrder(int customerId, int orderId, int reviewId);
 }

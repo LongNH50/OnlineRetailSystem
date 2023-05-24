@@ -41,7 +41,11 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = modelMapper.map(customerResponse, Customer.class);
         customer = customerRepository.save(customer);
 
-        return modelMapper.map(customer, CustomerResponse.class);
+        CustomerResponse savedCustomerResponse = modelMapper.map(customer, CustomerResponse.class);
+//        savedCustomerResponse.setBillingAddress(customerResponse.getBillingAddress());
+//        addressService.save(savedCustomerResponse.getBillingAddress());
+
+        return savedCustomerResponse;
     }
 
     @Override
@@ -112,9 +116,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CreditCardResponse saveCustomerCreditCard(int customerId, CreditCardResponse creditCardResponse) {
         CustomerResponse customerResponse = getCustomer(customerId);
-        customerResponse.addCreditCartResponse(creditCardResponse);
 
-        return creditCardService.save(creditCardResponse);
+        return creditCardService.save(customerId, creditCardResponse);
     }
 
     @Override
@@ -152,9 +155,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public OrderResponse saveCustomerOrder(int customerId, OrderResponse orderResponse) {
         CustomerResponse customerResponse = getCustomer(customerId);
-//        orderResponse.setCustomer(customerResponse);
+        orderResponse.setCustomer(customerResponse);
 
-        return orderService.save(orderResponse);
+        return orderService.save(customerId, orderResponse);
     }
 
     @Override
@@ -173,16 +176,21 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public OrderResponse placeCustomerOrder(int customerId, int orderId) {
+        return orderService.placeOrder(customerId, orderId);
+    }
+
+    @Override
     public Collection<OrderLineResponse> getCustomerOrderLines(int customerId, int orderId) {
         return orderService.getCustomerOrderLines(customerId, orderId);
     }
 
     @Override
     public OrderLineResponse saveCustomerOrderLine(int customerId, int orderId, OrderLineResponse orderLineResponse) {
-        OrderResponse orderResponse = getCustomerOrder(customerId, orderId);
-        orderResponse.addOrderLineResponse(orderLineResponse);
+        // make sure the order exist for this customer
+        getCustomerOrder(customerId, orderId);
 
-        return orderLineService.save(orderLineResponse);
+        return orderLineService.save(orderId, orderLineResponse);
     }
 
     @Override
@@ -207,20 +215,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ReviewResponse getCustomerOrderReview(int customerId, int orderId) {
-        return orderService.getReviewByCustomerAndOrder(customerId, orderId);
+    public ReviewResponse getCustomerOrderReview(int customerId, int orderId, int reviewId) {
+        return orderService.getReviewByCustomerAndOrder(customerId, orderId, reviewId);
     }
 
     @Override
-    public ReviewResponse saveCustomerOrderReview(int customerId, int orderId, ReviewResponse reviewResponse) {
-        CustomerResponse customerResponse = getCustomer(customerId);
-        customerResponse.addReviewResponse(reviewResponse);
+    public ReviewResponse saveCustomerOrderItemReview(int customerId, int orderId, int itemId, ReviewResponse reviewResponse) {
+        // make sure order exist for this customer before adding a review
+         getCustomerOrder(customerId, orderId);
 
-        return reviewService.save(reviewResponse);
+        return reviewService.save(customerId, itemId, reviewResponse);
     }
 
     @Override
-    public ReviewResponse updateCustomerOrderReview(int customerId, int orderId, int reviewId, ReviewResponse reviewResponse) {
+    public ReviewResponse updateCustomerOrderReview(int customerId, int orderId, int itemId, int reviewId, ReviewResponse reviewResponse) {
         // make sure the review exist for this customerId and orderId
         getCustomerOrderReviewWithReviewId(customerId, orderId, reviewId);
 

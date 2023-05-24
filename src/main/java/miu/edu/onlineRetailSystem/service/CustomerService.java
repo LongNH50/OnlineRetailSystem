@@ -44,6 +44,8 @@ public interface CustomerService {
 
     OrderResponse returnCustomerOrder(int customerId, int orderId);
 
+    OrderResponse placeCustomerOrder(int customerId, int orderId);
+
     Collection<OrderLineResponse> getCustomerOrderLines(int customerId, int orderId);
 
     OrderLineResponse saveCustomerOrderLine(int customerId, int orderId, OrderLineResponse orderLineResponse);
@@ -54,11 +56,11 @@ public interface CustomerService {
 
     OrderLineResponse deleteCustomerOrderLine(int customerId, int orderId, int orderLineId);
 
-    ReviewResponse getCustomerOrderReview(int customerId, int orderId);
+    ReviewResponse getCustomerOrderReview(int customerId, int orderId, int reviewId);
 
-    ReviewResponse saveCustomerOrderReview(int customerId, int orderId, ReviewResponse reviewResponse);
+    ReviewResponse saveCustomerOrderItemReview(int customerId, int orderId, int itemId, ReviewResponse reviewResponse);
 
-    ReviewResponse updateCustomerOrderReview(int customerId, int orderId, int reviewId, ReviewResponse reviewResponse);
+    ReviewResponse updateCustomerOrderReview(int customerId, int orderId, int itemId, int reviewId, ReviewResponse reviewResponse);
 
     ReviewResponse deleteCustomerOrderReview(int customerId, int orderId, int reviewId);
 
