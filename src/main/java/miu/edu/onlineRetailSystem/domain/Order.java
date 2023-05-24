@@ -20,7 +20,7 @@ public class Order {
     @Column(name = "orderID")
     private int id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "customerID", nullable = false)
     private Customer customer;
 
@@ -34,9 +34,5 @@ public class Order {
     @OneToMany
     @JoinColumn(name = "orderID")
     private List<OrderLine> lineItems = new ArrayList<>();
-
-    public void addOrderLine(OrderLine orderLine) {
-        this.lineItems.add(orderLine);
-    }
 
 }
