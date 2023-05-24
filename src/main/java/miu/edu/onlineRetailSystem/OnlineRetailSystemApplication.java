@@ -18,7 +18,6 @@ import java.util.List;
 
 @SpringBootApplication
 @EntityScan("miu.edu.onlineRetailSystem")
-@ComponentScan("config")
 public class OnlineRetailSystemApplication implements CommandLineRunner {
 
     @Autowired
