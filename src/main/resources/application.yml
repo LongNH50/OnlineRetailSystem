@@ -1,8 +1,8 @@
 spring:
-  security:
-    user:
-      name: user
-      password: pass
+#  security:
+#    user:
+#      name: user
+#      password: pass
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -34,7 +34,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
   activemq:
     broker-url: tcp://localhost:6161

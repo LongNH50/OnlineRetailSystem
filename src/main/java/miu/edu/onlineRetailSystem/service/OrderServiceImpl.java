@@ -5,6 +5,7 @@ import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
 import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
+import miu.edu.onlineRetailSystem.repository.AddressRepository;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -37,6 +40,9 @@ public class OrderServiceImpl implements OrderService {
         );
         order.setCustomer(customer);
         order.setStatus(OrderStatus.NEW);
+         if (orderResponse.getLineItems().size() == 0)
+             throw new CustomerErrorException("Add at least one item!");
+
         order = orderRepository.save(order);
 
         for (OrderLineResponse orderLineResponse : orderResponse.getLineItems()) {
@@ -63,9 +69,13 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findByIdAndStatusAndCustomer(customerId, orderId, OrderStatus.NEW);
         if (order == null)
             throw new ResourceNotFoundException("Order", "Id", orderId);
+        Address defaultShippingAddress = addressRepository.findDefaultAddressByCustomer(customerId);
+        if (defaultShippingAddress == null)
+            throw new CustomerErrorException("Please add a shipping address!");
 
         updateStock(order);
         order.setStatus(OrderStatus.PLACED);
+        order.setShippingAddress(defaultShippingAddress);
         order = orderRepository.save(order);
 
         return modelMapper.map(order, OrderResponse.class);
@@ -95,7 +105,6 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFoundException("Order", "Id", orderId);
 
         return modelMapper.map(order, OrderResponse.class);
-
     }
 
     @Override
