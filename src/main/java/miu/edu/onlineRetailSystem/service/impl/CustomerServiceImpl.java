@@ -1,9 +1,11 @@
 package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
 import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
+import miu.edu.onlineRetailSystem.logging.ILogger;
 import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
@@ -36,10 +38,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    ILogger logger;
+
     @Override
     public CustomerResponse save(CustomerResponse customerResponse) {
         Customer customer = modelMapper.map(customerResponse, Customer.class);
         customer = customerRepository.save(customer);
+
+        logger.info("Customer " + customer.getName() + " created!!");
 
         return modelMapper.map(customer, CustomerResponse.class);
     }
@@ -49,14 +56,16 @@ public class CustomerServiceImpl implements CustomerService {
         // make sure the customer exist
         getCustomer(customerId);
 
-        if (customerId != customerResponse.getId())
+        if (customerId != customerResponse.getId()) {
+            logger.error("Customer " + customerResponse.getName() + " does not exists");
             throw new ResourceNotFoundException("Customer", "Id", customerId);
+        }
 
         Customer customer = modelMapper.map(customerResponse, Customer.class);
         customer = customerRepository.save(customer);
+        logger.error("Customer " + customer.getName() + " updated successfully");
 
         return modelMapper.map(customer, CustomerResponse.class);
-
     }
 
     @Override
@@ -96,7 +105,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomerAddress(int customerId, int addressId) {
+
         addressService.delete(customerId, addressId);
+        logger.info("Customer " + customerId + " deleted successfully");
     }
 
     @Override
@@ -213,7 +224,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ReviewResponse saveCustomerOrderItemReview(int customerId, int orderId, int itemId, ReviewResponse reviewResponse) {
         // make sure order exist for this customer before adding a review
-         getCustomerOrder(customerId, orderId);
+        getCustomerOrder(customerId, orderId);
 
         return reviewService.save(customerId, itemId, reviewResponse);
     }
@@ -222,6 +233,7 @@ public class CustomerServiceImpl implements CustomerService {
     public ReviewResponse updateCustomerOrderReview(int customerId, int orderId, int itemId, int reviewId, ReviewResponse reviewResponse) {
         // make sure the review exist for this customerId and orderId
         getCustomerOrderReviewWithReviewId(customerId, orderId, reviewId);
+        logger.info("customer " + customerId + " updated review " + " for Item " + itemId + " in order " + itemId + " updated!");
 
         return reviewService.update(reviewId, reviewResponse);
     }

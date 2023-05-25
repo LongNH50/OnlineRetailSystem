@@ -62,6 +62,10 @@ public class Customer implements UserDetails {
 //        }
 //    }
 
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

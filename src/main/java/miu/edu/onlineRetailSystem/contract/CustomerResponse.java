@@ -31,4 +31,8 @@ public class CustomerResponse {
     List<ReviewResponse> reviewResponses = new ArrayList<>();
 
 //    private AddressResponse defaultShippingAddress;
+
+    public String getName() {
+        return firstName + " " + lastName;
+    }
 }

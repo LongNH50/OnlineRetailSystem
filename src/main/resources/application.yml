@@ -1,8 +1,13 @@
+logging:
+  root: INFO
+  file:
+    path: D:/Maharishi International University/Enterprise Architecture/Project/OnlineRetailSystem/src/main/resources/logs
+  org:
+    springframework:
+      boot:
+        logging:
+          LogLevel: INFO
 spring:
-#  security:
-#    user:
-#      name: user
-#      password: pass
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -18,15 +23,10 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-  logging:
-    level:
-      root: ERROR
-      org.springframework: ERROR
   datasource:
     url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNewWithJWT
     username: postgres
-    password: AdCool386259@
+    password: test123
     driverClassName: org.postgresql.Driver
   h2:
     console.enabled: true
@@ -34,7 +34,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
   activemq:
     broker-url: tcp://localhost:6161
