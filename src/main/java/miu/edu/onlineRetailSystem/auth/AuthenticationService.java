@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import miu.edu.onlineRetailSystem.config.JwtService;
 import miu.edu.onlineRetailSystem.domain.Customer;
+import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import miu.edu.onlineRetailSystem.domain.Token;
 import miu.edu.onlineRetailSystem.repository.TokenRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,10 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
 
   public AuthenticationResponse register(RegisterRequest request) {
+    Optional<Customer> customer = repository.findByEmail(request.getEmail());
+    if (customer.isPresent())
+      throw new CustomerErrorException("User already exists!");
+
     var user = Customer.builder()
         .firstName(request.getFirstname())
         .lastName(request.getLastname())
