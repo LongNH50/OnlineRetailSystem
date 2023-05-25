@@ -1,8 +1,13 @@
+logging:
+  root: INFO
+  file:
+    path: D:/Maharishi International University/Enterprise Architecture/Project/OnlineRetailSystem/src/main/resources/logs
+  org:
+    springframework:
+      boot:
+        logging:
+          LogLevel: INFO
 spring:
-#  security:
-#    user:
-#      name: user
-#      password: pass
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -18,15 +23,10 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-  logging:
-    level:
-      root: ERROR
-      org.springframework: ERROR
   datasource:
-    url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNew
+    url: jdbc:postgresql://localhost:5432/OnlineRetailSystemNewWithJWT
     username: postgres
-    password: AdCool386259@
+    password: test123
     driverClassName: org.postgresql.Driver
   h2:
     console.enabled: true
@@ -45,3 +45,10 @@ management:
     web:
       exposure:
         include: beans,mappings,env
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days

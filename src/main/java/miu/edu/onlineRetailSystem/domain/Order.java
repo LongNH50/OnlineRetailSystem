@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "orderID")
     private List<OrderLine> lineItems = new ArrayList<>();
-
 }

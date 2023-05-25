@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.CompositeItemResponse;
@@ -10,6 +10,7 @@ import miu.edu.onlineRetailSystem.domain.Item;
 import miu.edu.onlineRetailSystem.repository.CompositeItemRepository;
 import miu.edu.onlineRetailSystem.repository.IndividualItemRepository;
 import miu.edu.onlineRetailSystem.repository.ItemRepository;
+import miu.edu.onlineRetailSystem.service.ItemService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,6 +47,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponse save(ItemResponse itemResponse) {
         IndividualItem item = modelMapper.map(itemResponse, IndividualItem.class);
         item = individualItemRepository.save(item);
+
         return modelMapper.map(item, IndividualItemResponse.class);
     }
 
@@ -91,23 +93,29 @@ public class ItemServiceImpl implements ItemService {
 
         Item itemAdded = modelMapper.map(itemResponse, Item.class);
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Item not found"));
+        itemRepository.save(itemAdded);
 
         if (!(item instanceof CompositeItem)) {
             CompositeItemResponse compositeItemResponse = new CompositeItemResponse();
             ItemResponse deletedItem = remove(item.getId());
-            compositeItemResponse.setId(deletedItem.getId());
             compositeItemResponse.setDescription(deletedItem.getDescription());
             compositeItemResponse.setBarcodeNumber(deletedItem.getBarcodeNumber());
             compositeItemResponse.setName(deletedItem.getName());
             compositeItemResponse.setImage(deletedItem.getImage());
             compositeItemResponse.setPrice(deletedItem.getPrice());
+            compositeItemResponse.setQuantityInStock(deletedItem.getQuantityInStock());
             compositeItemResponse.addSubItem(itemResponse);
-            compositeItemRepository.save(modelMapper.map(compositeItemResponse, CompositeItem.class));
+            itemRepository.save(modelMapper.map(compositeItemResponse, CompositeItem.class));
         } else {
             CompositeItem i = ((CompositeItem) item);
             i.addSubItem(itemAdded);
             compositeItemRepository.save(i);
         }
+    }
+    @Override
+    public Collection<ItemResponse> findAllSubItemsByItemID(int itemId) {
+        Collection<ItemResponse> subItems = itemRepository.findAllSubItemsByItemID(itemId).stream().map(entity -> modelMapper.map(entity, ItemResponse.class)).collect(Collectors.toList());
+        return subItems;
     }
 
 }

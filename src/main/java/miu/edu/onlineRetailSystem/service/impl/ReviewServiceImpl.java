@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.ReviewResponse;
@@ -9,6 +9,7 @@ import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import miu.edu.onlineRetailSystem.repository.ItemRepository;
 import miu.edu.onlineRetailSystem.repository.ReviewRepository;
+import miu.edu.onlineRetailSystem.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Transactional
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private ModelMapper mapper;
 
@@ -63,7 +64,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public ReviewResponse view(int reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->new ResourceNotFoundException("review","review",reviewId));
         ReviewResponse reviewResponse = mapper.map(review, ReviewResponse.class);
         return reviewResponse;
     }
@@ -73,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public ReviewResponse remove(int id) {
 
-        Review review = reviewRepository.findById(id).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        Review review = reviewRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("review","review",id));
         reviewRepository.delete(review);
         ReviewResponse reviewResponse = mapper.map(review, ReviewResponse.class);
         return reviewResponse;
@@ -81,7 +82,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public ReviewResponse findById(int id) {
-        Review review = reviewRepository.findById(id).orElseThrow(() ->new EntityNotFoundException("credit card not found"));
+        Review review = reviewRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("review","review",id));;
         ReviewResponse reviewResponse = mapper.map(review, ReviewResponse.class);
         return reviewResponse;
     }

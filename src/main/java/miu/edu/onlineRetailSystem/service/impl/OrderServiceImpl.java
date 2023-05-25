@@ -1,22 +1,27 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
+import miu.edu.onlineRetailSystem.events.ProcessEvent;
 import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
-import miu.edu.onlineRetailSystem.repository.AddressRepository;
-import miu.edu.onlineRetailSystem.repository.CustomerRepository;
-import miu.edu.onlineRetailSystem.repository.OrderRepository;
+import miu.edu.onlineRetailSystem.logging.ILogger;
+import miu.edu.onlineRetailSystem.repository.*;
+import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
+import miu.edu.onlineRetailSystem.service.OrderLineService;
+import miu.edu.onlineRetailSystem.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -29,29 +34,53 @@ public class OrderServiceImpl implements OrderService {
     private CustomerRepository customerRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
+    private OrderLineRepository orderLineRepository;
 
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private OrderLineService orderLineService;
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    @Autowired
+    ILogger logger;
 
     @Override
     public OrderResponse save(int customerId, OrderResponse orderResponse) {
         Order order = modelMapper.map(orderResponse, Order.class);
         Customer customer = customerRepository.findById(customerId).orElseThrow(
-                () -> new ResourceNotFoundException("Customer", "Id", customerId)
+                () -> {
+                    logger.error("Customer does not exists with id: " + customerId);
+                    return new ResourceNotFoundException("Customer", "Id", customerId);
+                }
         );
+        Address defaultShippingAddress = addressRepository.findDefaultAddressByCustomer(customerId);
+        if (defaultShippingAddress == null) {
+            logger.error("Please add a shipping address before placing order");
+            throw new CustomerErrorException("Please add a shipping address");
+        }
+
+
+        order.setShippingAddress(defaultShippingAddress);
         order.setCustomer(customer);
         order.setStatus(OrderStatus.NEW);
-         if (orderResponse.getLineItems().size() == 0)
-             throw new CustomerErrorException("Add at least one item!");
+        if (orderResponse.getLineItems().size() == 0) {
+            logger.warning("Add at least one item!");
+            throw new CustomerErrorException("Add at least one item!");
+        }
+
+        order.setLineItems(new ArrayList<>());
 
         order = orderRepository.save(order);
 
         for (OrderLineResponse orderLineResponse : orderResponse.getLineItems()) {
             orderLineService.save(order.getId(), orderLineResponse);
         }
-
+        logger.info("Customer " + customer.getName() + " created order " + order.getId() + " successfully!");
         return modelMapper.map(order, OrderResponse.class);
     }
 
@@ -82,14 +111,19 @@ public class OrderServiceImpl implements OrderService {
         if (order == null)
             throw new ResourceNotFoundException("Order", "Id", orderId);
         Address defaultShippingAddress = addressRepository.findDefaultAddressByCustomer(customerId);
-        if (defaultShippingAddress == null)
-            throw new CustomerErrorException("Please add a shipping address!");
+        if (defaultShippingAddress == null) {
+            logger.error("Please add a shipping address before placing order");
+            throw new CustomerErrorException("Please add a shipping address");
+        }
 
         updateStock(order);
         order.setStatus(OrderStatus.PLACED);
         order.setShippingAddress(defaultShippingAddress);
         order = orderRepository.save(order);
 
+        publisher.publishEvent(new ProcessEvent(customerId, orderId));
+
+        logger.info("Order " + orderId + "placed successfully!");
         return modelMapper.map(order, OrderResponse.class);
     }
 

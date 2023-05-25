@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 
 @Entity
 @Data

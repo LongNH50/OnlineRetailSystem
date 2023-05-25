@@ -1,13 +1,14 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.AddressResponse;
 import miu.edu.onlineRetailSystem.domain.Address;
-import miu.edu.onlineRetailSystem.domain.AddressType;
+import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 import miu.edu.onlineRetailSystem.domain.Customer;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.AddressRepository;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
+import miu.edu.onlineRetailSystem.service.AddressService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,12 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponse save(int customerID, AddressResponse addressResponse) {
         if (addressResponse.isDefaultShippingAddress())
             changeDefaultShippingAddress(customerID);
-        else {
+        else if (addressResponse.getAddressType() == AddressType.SHIPPING_ADDRESS) {
             Address defaultAddress = addressRepository.findDefaultAddressByCustomer(customerID);
             if (defaultAddress == null)
                 addressResponse.setDefaultShippingAddress(true);
+        } else {
+            addressResponse.setDefaultShippingAddress(false);
         }
         Address address = mapper.map(addressResponse, Address.class);
         Customer customer = customerRepository.findById(customerID).orElseThrow(
