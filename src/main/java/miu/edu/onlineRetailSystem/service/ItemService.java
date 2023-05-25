@@ -23,6 +23,8 @@ public interface ItemService {
 
     void addSubItem(int id,ItemResponse itemResponse) ;
 
+    Collection<ItemResponse> findAllSubItemsByItemID(int itemId);
+
 //    void removeSubItem(int itemID,int subItemID);
 
 //    CompositeItemResponse saveCompositeItem(CompositeItemResponse compositeItemResponse);

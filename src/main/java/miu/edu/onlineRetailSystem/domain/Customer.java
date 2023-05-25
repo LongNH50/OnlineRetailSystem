@@ -1,11 +1,14 @@
 package miu.edu.onlineRetailSystem.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import miu.edu.onlineRetailSystem.nonDomain.Role;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,10 +28,18 @@ public class Customer implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customerID")
     private int id;
+    @NotNull
+    @NotEmpty
     private String firstName;
     private String lastName;
+    @NotNull
+    @NotEmpty
+    @Column(unique = true)
     private String email;
+    @NotNull
+    @NotEmpty
     private String password;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
 

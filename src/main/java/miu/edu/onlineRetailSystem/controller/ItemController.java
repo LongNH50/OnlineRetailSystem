@@ -7,6 +7,7 @@ import miu.edu.onlineRetailSystem.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +64,11 @@ public class ItemController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteItemByID(@PathVariable Integer id) {
         return ResponseEntity.ok(itemService.remove(id));
+    }
+
+    @GetMapping("/{id}/subItems")
+    public ResponseEntity<?> findAllSubItemsByItemID(@PathVariable Integer id) {
+        return new ResponseEntity<>(itemService.findAllSubItemsByItemID(id), HttpStatus.OK);
     }
 
 
