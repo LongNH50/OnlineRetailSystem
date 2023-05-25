@@ -46,6 +46,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponse save(ItemResponse itemResponse) {
         IndividualItem item = modelMapper.map(itemResponse, IndividualItem.class);
         item = individualItemRepository.save(item);
+
         return modelMapper.map(item, IndividualItemResponse.class);
     }
 

@@ -6,10 +6,8 @@ import miu.edu.onlineRetailSystem.domain.*;
 import miu.edu.onlineRetailSystem.events.ProcessEvent;
 import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
-import miu.edu.onlineRetailSystem.repository.AddressRepository;
+import miu.edu.onlineRetailSystem.repository.*;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
-import miu.edu.onlineRetailSystem.repository.CustomerRepository;
-import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -29,6 +28,10 @@ public class OrderServiceImpl implements OrderService {
     private CustomerRepository customerRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
+    private OrderLineRepository orderLineRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -43,10 +46,16 @@ public class OrderServiceImpl implements OrderService {
         Customer customer = customerRepository.findById(customerId).orElseThrow(
                 () -> new ResourceNotFoundException("Customer", "Id", customerId)
         );
+        Address defaultShippingAddress = addressRepository.findDefaultAddressByCustomer(customerId);
+        if (defaultShippingAddress == null)
+            throw new CustomerErrorException("Please add a shipping address");
+
+        order.setShippingAddress(defaultShippingAddress);
         order.setCustomer(customer);
         order.setStatus(OrderStatus.NEW);
          if (orderResponse.getLineItems().size() == 0)
              throw new CustomerErrorException("Add at least one item!");
+         order.setLineItems(new ArrayList<>());
 
         order = orderRepository.save(order);
 

@@ -31,10 +31,12 @@ public class AddressServiceImpl implements AddressService {
     public AddressResponse save(int customerID, AddressResponse addressResponse) {
         if (addressResponse.isDefaultShippingAddress())
             changeDefaultShippingAddress(customerID);
-        else {
+        else if (addressResponse.getAddressType() == AddressType.SHIPPING_ADDRESS) {
             Address defaultAddress = addressRepository.findDefaultAddressByCustomer(customerID);
             if (defaultAddress == null)
                 addressResponse.setDefaultShippingAddress(true);
+        } else {
+            addressResponse.setDefaultShippingAddress(false);
         }
         Address address = mapper.map(addressResponse, Address.class);
         Customer customer = customerRepository.findById(customerID).orElseThrow(

@@ -5,6 +5,7 @@ import miu.edu.onlineRetailSystem.domain.Item;
 import miu.edu.onlineRetailSystem.domain.Order;
 import miu.edu.onlineRetailSystem.domain.OrderLine;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
+import miu.edu.onlineRetailSystem.repository.AddressRepository;
 import miu.edu.onlineRetailSystem.repository.ItemRepository;
 import miu.edu.onlineRetailSystem.repository.OrderLineRepository;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
@@ -49,6 +50,7 @@ public class OrderLineServiceImpl implements OrderLineService {
         Item item = itemRepository.findById(itemId).orElseThrow(
                 () -> new ResourceNotFoundException("Item", "Id", itemId)
         );
+
         order.getLineItems().add(orderLine);
         orderLine.setItem(item);
         OrderLine savedOrderLine = orderLineRepository.save(orderLine);

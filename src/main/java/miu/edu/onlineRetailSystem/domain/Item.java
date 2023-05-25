@@ -29,6 +29,6 @@ public  class Item {
 //    @JoinTable(name = "ItemReview",
 //    joinColumns = @JoinColumn(name = "itemID"),
 //    inverseJoinColumns = @JoinColumn(name = "reviewID"))
-@OneToMany(cascade = CascadeType.DETACH)
+    @OneToMany(cascade = CascadeType.DETACH)
     private List<Review> reviews = new ArrayList<>();
 }
