@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -45,7 +46,6 @@ public class AddressRepositoryTest {
         shippingAddressList.add(shippingAddress);
         entityManager.persist(buyer);
         shippingAddress.setCustomer(buyer);
-//        entityManager.persist(buyer);
         entityManager.persist(shippingAddress);
         entityManager.flush();
         // when
@@ -60,7 +60,7 @@ public class AddressRepositoryTest {
     //getBillingAddressByCustomerId
     public void whenFindByCustomerId_thenReturnBillingAddress() {
         // given
-        List<Address> shippingAddressList = new ArrayList<>();
+        List<Address> addresses = new ArrayList<>();
         Customer buyer = new Customer();
         buyer.setFirstName("John");
         buyer.setLastName("Doe");
@@ -85,5 +85,108 @@ public class AddressRepositoryTest {
         assertThat(found)
                 .isEqualTo(billingAddress);
     }
+    
+    @Test
+    public void whenFindByCustomerId_thenReturnAddressList() {
+        // given
+        List<Address> addresses = new ArrayList<>();
+        Customer buyer = new Customer();
+        buyer.setFirstName("John");
+        buyer.setLastName("Doe");
+        buyer.setEmail("john.doe@example.com");
 
-}
+        Address billingAddress = new Address();
+        billingAddress.setCity("City 3");
+        billingAddress.setStreet("Street 3");
+        billingAddress.setState("State 3");
+        billingAddress.setZipCode("12345");
+        
+        Address shippingAddress = new Address();
+        shippingAddress.setCity("City 2");
+        shippingAddress.setStreet("Street 2");
+        shippingAddress.setState("State 2");
+        shippingAddress.setZipCode("12345");
+        shippingAddress.setAddressType(AddressType.SHIPPING_ADDRESS);
+
+        addresses.add(shippingAddress);
+        addresses.add(billingAddress);
+        billingAddress.setAddressType(AddressType.BILLING_ADDRESS);
+        entityManager.persist(buyer);
+        billingAddress.setCustomer(buyer);
+        shippingAddress.setCustomer(buyer);
+        entityManager.persist(buyer);
+        entityManager.persist(shippingAddress);
+        entityManager.persist(billingAddress);
+        entityManager.flush();
+        System.out.println("customerId"+buyer.getId());
+        // when
+        System.out.println(billingAddress);
+        Collection<Address> found = addressRepository.findByCustomer(buyer.getId());
+//        //then
+        assertThat(found)
+                .isEqualTo(addresses);
+    }
+
+    @Test
+    public void whenfindByIdAndCustomerthenReturnAddress () {
+        // given
+        List<Address> shippingAddressList = new ArrayList<>();
+        Customer buyer = new Customer();
+        buyer.setFirstName("John");
+        buyer.setLastName("Doe");
+        buyer.setEmail("john.doe@example.com");
+
+        Address billingAddress = new Address();
+        billingAddress.setCity("City 3");
+        billingAddress.setStreet("Street 3");
+        billingAddress.setState("State 3");
+        billingAddress.setZipCode("12345");
+        billingAddress.setAddressType(AddressType.BILLING_ADDRESS);
+
+        entityManager.persist(buyer);
+        billingAddress.setCustomer(buyer);
+        entityManager.persist(buyer);
+        entityManager.persist(billingAddress);
+        entityManager.flush();
+        System.out.println("customerId"+buyer.getId());
+        // when
+        System.out.println(billingAddress);
+        Address found = addressRepository.findByIdAndCustomer(buyer.getId(),billingAddress.getId());
+//        //then
+        assertThat(found)
+                .isEqualTo(billingAddress);
+
+    }
+    @Test
+    public void whenfindDefaultAddressByCustomerthenReturnAddress () {
+        // given
+        List<Address> shippingAddressList = new ArrayList<>();
+        Customer buyer = new Customer();
+        buyer.setFirstName("John");
+        buyer.setLastName("Doe");
+        buyer.setEmail("john.doe@example.com");
+
+        Address billingAddress = new Address();
+        billingAddress.setCity("City 3");
+        billingAddress.setStreet("Street 3");
+        billingAddress.setState("State 3");
+        billingAddress.setZipCode("12345");
+        billingAddress.setDefaultShippingAddress(true);
+        entityManager.persist(buyer);
+        billingAddress.setCustomer(buyer);
+        entityManager.persist(buyer);
+        entityManager.persist(billingAddress);
+        entityManager.flush();
+        System.out.println("customerId"+buyer.getId());
+        // when
+        System.out.println(billingAddress);
+        Address found = addressRepository.findDefaultAddressByCustomer(buyer.getId());
+//        //then
+        assertThat(found)
+                .isEqualTo(billingAddress);
+
+    }
+
+    }
+    
+
