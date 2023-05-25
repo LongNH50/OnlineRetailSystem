@@ -93,23 +93,29 @@ public class ItemServiceImpl implements ItemService {
 
         Item itemAdded = modelMapper.map(itemResponse, Item.class);
         Item item = itemRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Item not found"));
+        itemRepository.save(itemAdded);
 
         if (!(item instanceof CompositeItem)) {
             CompositeItemResponse compositeItemResponse = new CompositeItemResponse();
             ItemResponse deletedItem = remove(item.getId());
-            compositeItemResponse.setId(deletedItem.getId());
             compositeItemResponse.setDescription(deletedItem.getDescription());
             compositeItemResponse.setBarcodeNumber(deletedItem.getBarcodeNumber());
             compositeItemResponse.setName(deletedItem.getName());
             compositeItemResponse.setImage(deletedItem.getImage());
             compositeItemResponse.setPrice(deletedItem.getPrice());
+            compositeItemResponse.setQuantityInStock(deletedItem.getQuantityInStock());
             compositeItemResponse.addSubItem(itemResponse);
-            compositeItemRepository.save(modelMapper.map(compositeItemResponse, CompositeItem.class));
+            itemRepository.save(modelMapper.map(compositeItemResponse, CompositeItem.class));
         } else {
             CompositeItem i = ((CompositeItem) item);
             i.addSubItem(itemAdded);
             compositeItemRepository.save(i);
         }
+    }
+    @Override
+    public Collection<ItemResponse> findAllSubItemsByItemID(int itemId) {
+        Collection<ItemResponse> subItems = itemRepository.findAllSubItemsByItemID(itemId).stream().map(entity -> modelMapper.map(entity, ItemResponse.class)).collect(Collectors.toList());
+        return subItems;
     }
 
 }

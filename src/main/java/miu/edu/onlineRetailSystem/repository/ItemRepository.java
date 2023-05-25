@@ -14,4 +14,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 //    @Query("SELECT c FROM CompositeItem ci  join CompositeItem.subItems  where ci.id =:id  ci.subItems WHERE c.id = :subItemID")
 //    Optional<ItemResponse> findSubItemByID(int subItemID);
+
+    @Query("select cp.subItems from Item i join CompositeItem cp where cp.id =:itemId")
+    Collection<Item> findAllSubItemsByItemID(int itemId);
 }
