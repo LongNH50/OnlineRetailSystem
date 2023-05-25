@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.CompositeItemResponse;
@@ -10,6 +10,7 @@ import miu.edu.onlineRetailSystem.domain.Item;
 import miu.edu.onlineRetailSystem.repository.CompositeItemRepository;
 import miu.edu.onlineRetailSystem.repository.IndividualItemRepository;
 import miu.edu.onlineRetailSystem.repository.ItemRepository;
+import miu.edu.onlineRetailSystem.service.ItemService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

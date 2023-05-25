@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
@@ -8,6 +8,7 @@ import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.*;
+import miu.edu.onlineRetailSystem.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

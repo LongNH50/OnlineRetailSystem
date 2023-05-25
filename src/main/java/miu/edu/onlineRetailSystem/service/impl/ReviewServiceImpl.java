@@ -1,4 +1,4 @@
-package miu.edu.onlineRetailSystem.service;
+package miu.edu.onlineRetailSystem.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import miu.edu.onlineRetailSystem.contract.ReviewResponse;
@@ -9,6 +9,7 @@ import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
 import miu.edu.onlineRetailSystem.repository.CustomerRepository;
 import miu.edu.onlineRetailSystem.repository.ItemRepository;
 import miu.edu.onlineRetailSystem.repository.ReviewRepository;
+import miu.edu.onlineRetailSystem.service.ReviewService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Transactional
-public class ReviewServiceImpl implements ReviewService{
+public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private ModelMapper mapper;
 
