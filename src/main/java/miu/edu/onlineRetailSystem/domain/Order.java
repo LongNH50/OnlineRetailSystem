@@ -32,8 +32,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "orderID")
     private List<OrderLine> lineItems = new ArrayList<>();
-
 }

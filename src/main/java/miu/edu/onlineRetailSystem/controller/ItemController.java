@@ -24,7 +24,8 @@ public class ItemController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createIndividualItem(@RequestBody ItemResponse itemResponse) {
-        itemService.save(itemResponse);
+        itemResponse = itemService.save(itemResponse);
+
         return ResponseEntity.ok(itemResponse);
     }
 

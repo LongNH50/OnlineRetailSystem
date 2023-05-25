@@ -3,11 +3,11 @@ package miu.edu.onlineRetailSystem.service;
 import jakarta.transaction.Transactional;
 import miu.edu.onlineRetailSystem.contract.*;
 import miu.edu.onlineRetailSystem.domain.*;
+import miu.edu.onlineRetailSystem.exception.CustomerErrorException;
 import miu.edu.onlineRetailSystem.nonDomain.AddressType;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.exception.ResourceNotFoundException;
-import miu.edu.onlineRetailSystem.repository.AddressRepository;
-import miu.edu.onlineRetailSystem.repository.CustomerRepository;
+import miu.edu.onlineRetailSystem.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,11 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = modelMapper.map(customerResponse, Customer.class);
         customer = customerRepository.save(customer);
 
-        CustomerResponse savedCustomerResponse = modelMapper.map(customer, CustomerResponse.class);
-//        savedCustomerResponse.setBillingAddress(customerResponse.getBillingAddress());
-//        addressService.save(savedCustomerResponse.getBillingAddress());
-
-        return savedCustomerResponse;
+        return modelMapper.map(customer, CustomerResponse.class);
     }
 
     @Override
@@ -151,9 +147,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public OrderResponse saveCustomerOrder(int customerId, OrderResponse orderResponse) {
-        CustomerResponse customerResponse = getCustomer(customerId);
-        orderResponse.setCustomer(customerResponse);
-
         return orderService.save(customerId, orderResponse);
     }
 

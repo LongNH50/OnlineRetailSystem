@@ -3,6 +3,7 @@ package miu.edu.onlineRetailSystem.events.listeners;
 import miu.edu.onlineRetailSystem.domain.Order;
 import miu.edu.onlineRetailSystem.events.EmailEvent;
 import miu.edu.onlineRetailSystem.events.ProcessEvent;
+import miu.edu.onlineRetailSystem.events.ShipOrderEvent;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
 import miu.edu.onlineRetailSystem.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,7 @@ public class ProcessOrderServiceImpl implements ProcessOrderService {
         orderRepository.save(order);
         publisher.publishEvent(new EmailEvent(order.getCustomer().getEmail(),
                 "Your order has been processed"));
+        publisher.publishEvent(new ShipOrderEvent(processEvent.getCustomerId(),
+                processEvent.getOrderId()));
     }
 }

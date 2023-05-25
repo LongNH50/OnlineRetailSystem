@@ -1,6 +1,7 @@
 package miu.edu.onlineRetailSystem.events.listeners;
 
 import miu.edu.onlineRetailSystem.domain.Order;
+import miu.edu.onlineRetailSystem.events.DeliverEvent;
 import miu.edu.onlineRetailSystem.events.EmailEvent;
 import miu.edu.onlineRetailSystem.events.ShipOrderEvent;
 import miu.edu.onlineRetailSystem.nonDomain.OrderStatus;
@@ -26,5 +27,7 @@ public class ShipOrderServiceImpl implements ShipOrderService {
         orderRepository.save(order);
         publisher.publishEvent(new EmailEvent(order.getCustomer().getEmail(),
                 "Your order has been shipped"));
+        publisher.publishEvent(new DeliverEvent(shipOrderEvent.getCustomerId(),
+                shipOrderEvent.getOrderId()));
     }
 }
